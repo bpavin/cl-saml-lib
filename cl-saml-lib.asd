@@ -1,5 +1,5 @@
-(defsystem :cl-saml
-  :name "cl-saml"
+(defsystem :cl-saml-lib
+  :name "cl-saml-lib"
   :description "SAML Identity Provider simulation library for Common Lisp"
   :version "0.1.0"
   :author ""
@@ -13,12 +13,12 @@
                #:xpath
                #:pem
                #:cl-saml-lib/src/core/app-ctx)
-  :in-order-to ((test-op (test-op "cl-saml/tests"))))
+  :in-order-to ((test-op (test-op "cl-saml-lib/tests"))))
 
-(asdf:defsystem :cl-saml/tests
+(asdf:defsystem :cl-saml-lib/tests
   :author ""
   :license ""
-  :depends-on (#:rove #:cl-saml #:cl-ppcre)
+  :depends-on (#:rove #:cl-saml-lib #:cl-ppcre)
   :components ((:module "tests"
                 :components
                 ((:file "core/domain/saml/saml-response-test")
