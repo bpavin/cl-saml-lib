@@ -1,7 +1,7 @@
-(defpackage :cl-saml/src/core/infrastructure/crypto-provider
+(defpackage :cl-saml-lib/src/core/infrastructure/crypto-provider
   (:use :cl)
   (:nicknames :crypto-provider)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
   (:export
    #:+digest-sha-1+
    #:+digest-sha-256+
@@ -29,7 +29,7 @@
    #:decrypt-data
    #:extract-key-from-cert))
 
-(in-package :cl-saml/src/core/infrastructure/crypto-provider)
+(in-package :cl-saml-lib/src/core/infrastructure/crypto-provider)
 
 ;;; Algorithm Constants
 

@@ -1,15 +1,15 @@
-(defpackage :cl-saml/src/core/actions/generate-authn-request
+(defpackage :cl-saml-lib/src/core/actions/generate-authn-request
   (:use :cl)
   (:nicknames :generate-authn-request)
   (:import-from :defclass-std)
   (:import-from :log4cl)
-  (:import-from :cl-saml/src/core/infrastructure/sp-config)
-  (:import-from :cl-saml/src/core/domain/saml/authn-request)
+  (:import-from :cl-saml-lib/src/core/infrastructure/sp-config)
+  (:import-from :cl-saml-lib/src/core/domain/saml/authn-request)
   (:export
    :generate-authn-request
    :run))
 
-(in-package :cl-saml/src/core/actions/generate-authn-request)
+(in-package :cl-saml-lib/src/core/actions/generate-authn-request)
 
 (defclass-std:defclass/std generate-authn-request ()
   ())

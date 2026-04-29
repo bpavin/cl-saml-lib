@@ -1,9 +1,9 @@
-(defpackage :cl-saml/src/core/domain/metadata/endpoint
+(defpackage :cl-saml-lib/src/core/domain/metadata/endpoint
   (:use #:cl)
   (:nicknames :endpoint)
   (:import-from #:defclass-std)
-  (:import-from #:cl-saml/src/core/domain/saml/namespaces)
-  (:import-from #:cl-saml/src/core/infrastructure/xml)
+  (:import-from #:cl-saml-lib/src/core/domain/saml/namespaces)
+  (:import-from #:cl-saml-lib/src/core/infrastructure/xml)
   (:export
    ;; Classes
    #:endpoint
@@ -19,7 +19,7 @@
    ;; XML Parse
    #:parse-endpoint-xml))
 
-(in-package :cl-saml/src/core/domain/metadata/endpoint)
+(in-package :cl-saml-lib/src/core/domain/metadata/endpoint)
 
 (defclass-std:defclass/std endpoint ()
   ((binding :type string)

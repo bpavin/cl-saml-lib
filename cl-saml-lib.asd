@@ -12,7 +12,7 @@
                #:cxml
                #:xpath
                #:pem
-               #:cl-saml/src/core/app-ctx)
+               #:cl-saml-lib/src/core/app-ctx)
   :in-order-to ((test-op (test-op "cl-saml/tests"))))
 
 (asdf:defsystem :cl-saml/tests

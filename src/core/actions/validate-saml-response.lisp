@@ -1,16 +1,16 @@
-(defpackage :cl-saml/src/core/actions/validate-saml-response
+(defpackage :cl-saml-lib/src/core/actions/validate-saml-response
   (:use :cl)
   (:nicknames :validate-saml-response)
   (:import-from :defclass-std)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
-  (:import-from :cl-saml/src/core/infrastructure/cxml-impl)
-  (:import-from :cl-saml/src/core/infrastructure/crypto-provider)
-  (:import-from :cl-saml/src/core/domain/saml/saml-response)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/infrastructure/cxml-impl)
+  (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider)
+  (:import-from :cl-saml-lib/src/core/domain/saml/saml-response)
   (:export
    :validate-saml-response
    :run))
 
-(in-package :cl-saml/src/core/actions/validate-saml-response)
+(in-package :cl-saml-lib/src/core/actions/validate-saml-response)
 
 (defclass-std:defclass/std validate-saml-response ()
   ((xml-parser :type xml:xml-parser)

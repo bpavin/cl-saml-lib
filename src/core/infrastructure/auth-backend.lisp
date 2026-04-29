@@ -1,4 +1,4 @@
-(defpackage :cl-saml/src/core/infrastructure/auth-backend
+(defpackage :cl-saml-lib/src/core/infrastructure/auth-backend
   (:use :cl)
   (:nicknames :auth-backend)
   (:import-from :defclass-std)
@@ -7,7 +7,7 @@
    #:authenticate-user
    #:get-user-attributes))
 
-(in-package :cl-saml/src/core/infrastructure/auth-backend)
+(in-package :cl-saml-lib/src/core/infrastructure/auth-backend)
 
 (defclass-std:defclass/std auth-backend ()
   ((name :type string)))

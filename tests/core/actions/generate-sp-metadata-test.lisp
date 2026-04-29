@@ -2,7 +2,7 @@
   (:use :cl)
   (:nicknames :generate-sp-metadata-test)
   (:import-from :rove)
-  (:import-from :cl-saml/src/core/app-ctx)
+  (:import-from :cl-saml-lib/src/core/app-ctx)
   (:import-from :generate-sp-metadata)
   (:import-from :sp-config)
   (:export))

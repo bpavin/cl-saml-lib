@@ -1,9 +1,9 @@
-(defpackage :cl-saml/src/core/domain/saml/attributes
+(defpackage :cl-saml-lib/src/core/domain/saml/attributes
   (:use :cl)
   (:nicknames :attributes)
-  (:import-from :cl-saml/src/core/infrastructure/identifiers)
-  (:import-from :cl-saml/src/core/infrastructure/time)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/infrastructure/identifiers)
+  (:import-from :cl-saml-lib/src/core/infrastructure/time)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
   (:export
    #:saml-attribute
    ;; slots
@@ -30,7 +30,7 @@
    #:make-groups-attribute
    #:map-user-to-attributes))
 
-(in-package :cl-saml/src/core/domain/saml/attributes)
+(in-package :cl-saml-lib/src/core/domain/saml/attributes)
 
 ;;; Attribute Structure
 

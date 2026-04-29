@@ -1,11 +1,11 @@
-(defpackage :cl-saml/src/core/domain/metadata/role-descriptor
+(defpackage :cl-saml-lib/src/core/domain/metadata/role-descriptor
   (:use #:cl)
   (:nicknames :role-descriptor)
   (:import-from #:defclass-std)
-  (:import-from #:cl-saml/src/core/domain/saml/namespaces)
-  (:import-from #:cl-saml/src/core/domain/metadata/organization)
-  (:import-from #:cl-saml/src/core/domain/metadata/key-descriptor)
-  (:import-from #:cl-saml/src/core/domain/metadata/contact-person)
+  (:import-from #:cl-saml-lib/src/core/domain/saml/namespaces)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/organization)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/key-descriptor)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/contact-person)
   (:export
    ;; Class
    #:role-descriptor
@@ -15,7 +15,7 @@
    #:organization
    #:contact-persons))
 
-(in-package :cl-saml/src/core/domain/metadata/role-descriptor)
+(in-package :cl-saml-lib/src/core/domain/metadata/role-descriptor)
 
 (defclass-std:defclass/std role-descriptor ()
   ((protocol-support :type list :std (list namespaces:+saml-protocol-uri+))

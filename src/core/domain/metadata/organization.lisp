@@ -1,9 +1,9 @@
-(defpackage :cl-saml/src/core/domain/metadata/organization
+(defpackage :cl-saml-lib/src/core/domain/metadata/organization
   (:use #:cl)
   (:nicknames :organization)
   (:import-from #:defclass-std)
-  (:import-from #:cl-saml/src/core/domain/saml/namespaces)
-  (:import-from #:cl-saml/src/core/infrastructure/xml)
+  (:import-from #:cl-saml-lib/src/core/domain/saml/namespaces)
+  (:import-from #:cl-saml-lib/src/core/infrastructure/xml)
   (:export
    ;; Class
    #:organization
@@ -16,7 +16,7 @@
    ;; XML Parse
    #:parse-organization-xml))
 
-(in-package :cl-saml/src/core/domain/metadata/organization)
+(in-package :cl-saml-lib/src/core/domain/metadata/organization)
 
 (defclass-std:defclass/std organization ()
   ((name :type list :std nil)

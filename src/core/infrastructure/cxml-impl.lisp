@@ -1,16 +1,16 @@
-(defpackage :cl-saml/src/core/infrastructure/cxml-impl
+(defpackage :cl-saml-lib/src/core/infrastructure/cxml-impl
   (:use :cl)
   (:nicknames :cxml-impl)
   (:import-from :cxml)
   (:import-from :xpath)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
-  (:import-from :cl-saml/src/core/domain/saml/namespaces)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/domain/saml/namespaces)
   (:export
    #:cxml-parser
    #:cxml-document
    #:parse-xml))
 
-(in-package :cl-saml/src/core/infrastructure/cxml-impl)
+(in-package :cl-saml-lib/src/core/infrastructure/cxml-impl)
 
 ;;; Type Definitions
 (defclass-std:defclass/std cxml-parser (xml:xml-parser)

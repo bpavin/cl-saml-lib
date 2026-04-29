@@ -1,10 +1,10 @@
-(defpackage :cl-saml/src/core/domain/saml/name-id
+(defpackage :cl-saml-lib/src/core/domain/saml/name-id
   (:use :cl)
   (:nicknames :name-id)
-  (:import-from :cl-saml/src/core/infrastructure/identifiers)
-  (:import-from :cl-saml/src/core/infrastructure/time)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
-  (:import-from :cl-saml/src/core/domain/saml/namespaces)
+  (:import-from :cl-saml-lib/src/core/infrastructure/identifiers)
+  (:import-from :cl-saml-lib/src/core/infrastructure/time)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/domain/saml/namespaces)
   (:export
    #:name-id
    ;; slots
@@ -17,7 +17,7 @@
    #:build-nameid-xml
    #:parse-nameid-xml))
 
-(in-package :cl-saml/src/core/domain/saml/name-id)
+(in-package :cl-saml-lib/src/core/domain/saml/name-id)
 
 ;;; NameID Structure
 

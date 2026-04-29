@@ -1,4 +1,4 @@
-(defpackage :cl-saml/src/core/infrastructure/identifiers
+(defpackage :cl-saml-lib/src/core/infrastructure/identifiers
   (:use :cl)
   (:nicknames :identifiers)
   (:export
@@ -8,7 +8,7 @@
    #:extract-id-from-samlxml
    #:extract-id-from-authnrequest))
 
-(in-package :cl-saml/src/core/infrastructure/identifiers)
+(in-package :cl-saml-lib/src/core/infrastructure/identifiers)
 
 ;;; SAML ID Format
 ;; SAML IDs must begin with a letter (_) and contain only alphanumeric, hyphen, underscore, period

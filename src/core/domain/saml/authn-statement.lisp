@@ -1,10 +1,10 @@
-(defpackage :cl-saml/src/core/domain/saml/authn-statement
+(defpackage :cl-saml-lib/src/core/domain/saml/authn-statement
   (:use :cl)
   (:nicknames :authn-statement)
-  (:import-from :cl-saml/src/core/infrastructure/identifiers)
-  (:import-from :cl-saml/src/core/infrastructure/time)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
-  (:import-from :cl-saml/src/core/domain/saml/namespaces)
+  (:import-from :cl-saml-lib/src/core/infrastructure/identifiers)
+  (:import-from :cl-saml-lib/src/core/infrastructure/time)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/domain/saml/namespaces)
   (:export
    #:authn-statement
    ;; slots
@@ -26,7 +26,7 @@
    #:build-authncontext-xml
    ))
 
-(in-package :cl-saml/src/core/domain/saml/authn-statement)
+(in-package :cl-saml-lib/src/core/domain/saml/authn-statement)
 
 ;;; AuthnStatement Structure
 

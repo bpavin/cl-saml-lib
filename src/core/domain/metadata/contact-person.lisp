@@ -1,9 +1,9 @@
-(defpackage :cl-saml/src/core/domain/metadata/contact-person
+(defpackage :cl-saml-lib/src/core/domain/metadata/contact-person
   (:use #:cl)
   (:nicknames :contact-person)
   (:import-from #:defclass-std)
-  (:import-from #:cl-saml/src/core/domain/saml/namespaces)
-  (:import-from #:cl-saml/src/core/infrastructure/xml)
+  (:import-from #:cl-saml-lib/src/core/domain/saml/namespaces)
+  (:import-from #:cl-saml-lib/src/core/infrastructure/xml)
   (:export
    ;; Class
    #:contact-person
@@ -17,7 +17,7 @@
    ;; XML Parse
    #:parse-contact-person-xml))
 
-(in-package :cl-saml/src/core/domain/metadata/contact-person)
+(in-package :cl-saml-lib/src/core/domain/metadata/contact-person)
 
 (defclass-std:defclass/std contact-person ()
   ((contact-type :type (member :technical :support :administrative :billing :other))

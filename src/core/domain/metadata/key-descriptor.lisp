@@ -1,9 +1,9 @@
-(defpackage :cl-saml/src/core/domain/metadata/key-descriptor
+(defpackage :cl-saml-lib/src/core/domain/metadata/key-descriptor
   (:use #:cl)
   (:nicknames :key-descriptor)
   (:import-from #:defclass-std)
-  (:import-from #:cl-saml/src/core/domain/saml/namespaces)
-  (:import-from #:cl-saml/src/core/infrastructure/xml)
+  (:import-from #:cl-saml-lib/src/core/domain/saml/namespaces)
+  (:import-from #:cl-saml-lib/src/core/infrastructure/xml)
   (:export
    ;; Class
    #:key-descriptor
@@ -15,7 +15,7 @@
    ;; XML Parse
    #:parse-key-descriptor-xml))
 
-(in-package :cl-saml/src/core/domain/metadata/key-descriptor)
+(in-package :cl-saml-lib/src/core/domain/metadata/key-descriptor)
 
 (defclass-std:defclass/std key-descriptor ()
   ((key-use :type (member :signing :encryption nil))

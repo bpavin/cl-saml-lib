@@ -1,20 +1,20 @@
-(defpackage :cl-saml/src/core/app-ctx
+(defpackage :cl-saml-lib/src/core/app-ctx
   (:use :cl)
   (:nicknames :app-ctx)
-  (:import-from :cl-saml/src/core/infrastructure/crypto-provider)
-  (:import-from :cl-saml/src/core/infrastructure/crypto-provider-impl)
-  (:import-from :cl-saml/src/core/infrastructure/cxml-impl)
-  (:import-from :cl-saml/src/core/infrastructure/idp-config)
-  (:import-from :cl-saml/src/core/infrastructure/sp-config)
-  (:import-from :cl-saml/src/core/actions/decode-authn-request)
-  (:import-from :cl-saml/src/core/actions/validate-authn-request)
-  (:import-from :cl-saml/src/core/actions/validate-saml-response)
-  (:import-from :cl-saml/src/core/actions/generate-saml-response)
-  (:import-from :cl-saml/src/core/actions/decode-sp-metadata)
-  (:import-from :cl-saml/src/core/actions/decode-idp-metadata)
-  (:import-from :cl-saml/src/core/actions/generate-sp-metadata)
-  (:import-from :cl-saml/src/core/actions/generate-idp-metadata)
-  (:import-from :cl-saml/src/core/actions/generate-authn-request)
+  (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider)
+  (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider-impl)
+  (:import-from :cl-saml-lib/src/core/infrastructure/cxml-impl)
+  (:import-from :cl-saml-lib/src/core/infrastructure/idp-config)
+  (:import-from :cl-saml-lib/src/core/infrastructure/sp-config)
+  (:import-from :cl-saml-lib/src/core/actions/decode-authn-request)
+  (:import-from :cl-saml-lib/src/core/actions/validate-authn-request)
+  (:import-from :cl-saml-lib/src/core/actions/validate-saml-response)
+  (:import-from :cl-saml-lib/src/core/actions/generate-saml-response)
+  (:import-from :cl-saml-lib/src/core/actions/decode-sp-metadata)
+  (:import-from :cl-saml-lib/src/core/actions/decode-idp-metadata)
+  (:import-from :cl-saml-lib/src/core/actions/generate-sp-metadata)
+  (:import-from :cl-saml-lib/src/core/actions/generate-idp-metadata)
+  (:import-from :cl-saml-lib/src/core/actions/generate-authn-request)
   (:export
    #:app-ctx
    #:idp-config
@@ -30,7 +30,7 @@
    #:generate-authn-request
    #:shutdown))
 
-(in-package :cl-saml/src/core/app-ctx)
+(in-package :cl-saml-lib/src/core/app-ctx)
 
 (defclass-std:defclass/std app-ctx ()
   ((crypto-provider :type crypto-provider:crypto-provider)

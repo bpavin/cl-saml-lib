@@ -1,4 +1,4 @@
-(defpackage :cl-saml/src/core/infrastructure/sp-config
+(defpackage :cl-saml-lib/src/core/infrastructure/sp-config
   (:use :cl)
   (:nicknames :sp-config)
   (:import-from :defclass-std)
@@ -11,7 +11,7 @@
    #:slo-url
    #:get-sp-config))
 
-(in-package :cl-saml/src/core/infrastructure/sp-config)
+(in-package :cl-saml-lib/src/core/infrastructure/sp-config)
 
 (defclass-std:defclass/std sp-config ()
   ((entity-id :type string)

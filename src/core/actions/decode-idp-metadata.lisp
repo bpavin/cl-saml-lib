@@ -1,18 +1,18 @@
-(defpackage :cl-saml/src/core/actions/decode-idp-metadata
+(defpackage :cl-saml-lib/src/core/actions/decode-idp-metadata
   (:use :cl)
   (:nicknames :decode-idp-metadata)
   (:import-from :defclass-std)
-  (:import-from :cl-saml/src/core/domain/metadata/entity-descriptor)
-  (:import-from :cl-saml/src/core/infrastructure/time)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
-  (:import-from :cl-saml/src/core/infrastructure/idp-config)
+  (:import-from :cl-saml-lib/src/core/domain/metadata/entity-descriptor)
+  (:import-from :cl-saml-lib/src/core/infrastructure/time)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/infrastructure/idp-config)
   (:export
    #:decode-idp-metadata
    #:validation-error
    #:validation-error-message
    #:run))
 
-(in-package :cl-saml/src/core/actions/decode-idp-metadata)
+(in-package :cl-saml-lib/src/core/actions/decode-idp-metadata)
 
 (defclass-std:defclass/std decode-idp-metadata ()
   ((xml-parser :type xml:xml-parser)))

@@ -1,15 +1,15 @@
-(defpackage :cl-saml/src/core/domain/saml/assertion
+(defpackage :cl-saml-lib/src/core/domain/saml/assertion
   (:use :cl)
   (:nicknames :assertion)
-  (:import-from :cl-saml/src/core/infrastructure/identifiers)
-  (:import-from :cl-saml/src/core/infrastructure/time)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
-  (:import-from :cl-saml/src/core/infrastructure/crypto-provider)
-  (:import-from :cl-saml/src/core/domain/saml/issuer)
-  (:import-from :cl-saml/src/core/domain/saml/subject)
-  (:import-from :cl-saml/src/core/domain/saml/saml-conditions)
-  (:import-from :cl-saml/src/core/domain/saml/authn-statement)
-  (:import-from :cl-saml/src/core/domain/saml/attributes)
+  (:import-from :cl-saml-lib/src/core/infrastructure/identifiers)
+  (:import-from :cl-saml-lib/src/core/infrastructure/time)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider)
+  (:import-from :cl-saml-lib/src/core/domain/saml/issuer)
+  (:import-from :cl-saml-lib/src/core/domain/saml/subject)
+  (:import-from :cl-saml-lib/src/core/domain/saml/saml-conditions)
+  (:import-from :cl-saml-lib/src/core/domain/saml/authn-statement)
+  (:import-from :cl-saml-lib/src/core/domain/saml/attributes)
   (:export
    #:assertion
    ;; slots
@@ -28,7 +28,7 @@
    #:parse-authnstatement-xml
    #:parse-authncontext-xml))
 
-(in-package :cl-saml/src/core/domain/saml/assertion)
+(in-package :cl-saml-lib/src/core/domain/saml/assertion)
 
 ;;; Assertion Structure
 

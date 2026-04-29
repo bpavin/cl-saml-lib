@@ -2,7 +2,7 @@
   (:use :cl)
   (:nicknames :generate-idp-metadata-test)
   (:import-from :rove)
-  (:import-from :cl-saml/src/core/app-ctx)
+  (:import-from :cl-saml-lib/src/core/app-ctx)
   (:export))
 
 (in-package :cl-saml/tests/core/actions/generate-idp-metadata-test)

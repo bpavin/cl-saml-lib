@@ -2,8 +2,8 @@
 (defpackage :cl-saml/tests/core/infrastructure/crypto-provider-impl-test
   (:use :cl)
   (:import-from :rove)
-  (:import-from :cl-saml/src/core/infrastructure/crypto-provider-impl)
-  (:import-from :cl-saml/src/core/infrastructure/crypto-provider)
+  (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider-impl)
+  (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider)
   (:import-from :asdf)
   (:import-from :uiop)
   (:export))

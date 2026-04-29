@@ -1,15 +1,15 @@
-(defpackage :cl-saml/src/core/domain/saml/saml-status
+(defpackage :cl-saml-lib/src/core/domain/saml/saml-status
   (:use :cl)
   (:nicknames :saml-status)
-  (:import-from :cl-saml/src/core/infrastructure/identifiers)
-  (:import-from :cl-saml/src/core/infrastructure/time)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/infrastructure/identifiers)
+  (:import-from :cl-saml-lib/src/core/infrastructure/time)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
   (:export
    #:saml-status
    #:parse-status-xml
    #:build-status-xml))
 
-(in-package :cl-saml/src/core/domain/saml/saml-status)
+(in-package :cl-saml-lib/src/core/domain/saml/saml-status)
 
 ;;; Status Structure
 

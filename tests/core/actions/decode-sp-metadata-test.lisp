@@ -2,9 +2,9 @@
   (:use :cl)
   (:nicknames :decode-sp-metadata-test)
   (:import-from :rove)
-  (:import-from :cl-saml/src/core/app-ctx)
-  (:import-from :cl-saml/src/core/actions/decode-sp-metadata)
-  (:import-from :cl-saml/src/core/infrastructure/sp-config)
+  (:import-from :cl-saml-lib/src/core/app-ctx)
+  (:import-from :cl-saml-lib/src/core/actions/decode-sp-metadata)
+  (:import-from :cl-saml-lib/src/core/infrastructure/sp-config)
   (:export))
 
 (in-package :cl-saml/tests/core/actions/decode-sp-metadata-test)

@@ -1,15 +1,15 @@
-(defpackage :cl-saml/src/core/domain/saml/saml-response
+(defpackage :cl-saml-lib/src/core/domain/saml/saml-response
   (:use :cl)
   (:nicknames :saml-response)
-  (:import-from :cl-saml/src/core/infrastructure/identifiers)
-  (:import-from :cl-saml/src/core/infrastructure/time)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
-  (:import-from :cl-saml/src/core/infrastructure/crypto-provider)
-  (:import-from :cl-saml/src/core/domain/saml/issuer)
-  (:import-from :cl-saml/src/core/domain/saml/saml-status)
-  (:import-from :cl-saml/src/core/domain/saml/saml-status)
-  (:import-from :cl-saml/src/core/domain/saml/assertion)
-  (:import-from :cl-saml/src/core/domain/saml/namespaces)
+  (:import-from :cl-saml-lib/src/core/infrastructure/identifiers)
+  (:import-from :cl-saml-lib/src/core/infrastructure/time)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider)
+  (:import-from :cl-saml-lib/src/core/domain/saml/issuer)
+  (:import-from :cl-saml-lib/src/core/domain/saml/saml-status)
+  (:import-from :cl-saml-lib/src/core/domain/saml/saml-status)
+  (:import-from :cl-saml-lib/src/core/domain/saml/assertion)
+  (:import-from :cl-saml-lib/src/core/domain/saml/namespaces)
   (:export
    #:saml-response
    ;; slots
@@ -27,7 +27,7 @@
    #:parse-response-xml
    ))
 
-(in-package :cl-saml/src/core/domain/saml/saml-response)
+(in-package :cl-saml-lib/src/core/domain/saml/saml-response)
 
 (defclass saml-response ()
   ((id

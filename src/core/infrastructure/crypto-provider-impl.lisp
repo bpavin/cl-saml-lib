@@ -1,15 +1,15 @@
-(defpackage :cl-saml/src/core/infrastructure/crypto-provider-impl
+(defpackage :cl-saml-lib/src/core/infrastructure/crypto-provider-impl
   (:use :cl)
   (:nicknames :crypto-provider-impl)
   (:import-from :log4cl)
   (:import-from :cffi)
   (:import-from :defclass-std)
-  (:import-from :cl-saml/src/core/infrastructure/crypto-provider)
+  (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider)
   (:export
    #:crypto-provider-impl
    #:cleanup))
 
-(in-package :cl-saml/src/core/infrastructure/crypto-provider-impl)
+(in-package :cl-saml-lib/src/core/infrastructure/crypto-provider-impl)
 
 (defclass-std:defclass/std crypto-provider-impl (crypto-provider:crypto-provider)
   ())

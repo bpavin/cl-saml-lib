@@ -1,19 +1,19 @@
-(defpackage :cl-saml/src/core/domain/metadata/entity-descriptor
+(defpackage :cl-saml-lib/src/core/domain/metadata/entity-descriptor
   (:use #:cl)
   (:nicknames :entity-descriptor)
   (:import-from #:defclass-std)
-  (:import-from #:cl-saml/src/core/domain/saml/namespaces)
-  (:import-from #:cl-saml/src/core/infrastructure/time)
-  (:import-from #:cl-saml/src/core/infrastructure/identifiers)
-  (:import-from #:cl-saml/src/core/infrastructure/xml)
-  (:import-from #:cl-saml/src/core/domain/metadata/organization)
-  (:import-from #:cl-saml/src/core/domain/metadata/contact-person)
-  (:import-from #:cl-saml/src/core/domain/metadata/key-descriptor)
-  (:import-from #:cl-saml/src/core/domain/metadata/endpoint)
-  (:import-from #:cl-saml/src/core/domain/metadata/sp-sso-descriptor)
-  (:import-from #:cl-saml/src/core/domain/metadata/idp-sso-descriptor)
-  (:import-from #:cl-saml/src/core/infrastructure/idp-config)
-  (:import-from #:cl-saml/src/core/infrastructure/sp-config)
+  (:import-from #:cl-saml-lib/src/core/domain/saml/namespaces)
+  (:import-from #:cl-saml-lib/src/core/infrastructure/time)
+  (:import-from #:cl-saml-lib/src/core/infrastructure/identifiers)
+  (:import-from #:cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/organization)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/contact-person)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/key-descriptor)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/endpoint)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/sp-sso-descriptor)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/idp-sso-descriptor)
+  (:import-from #:cl-saml-lib/src/core/infrastructure/idp-config)
+  (:import-from #:cl-saml-lib/src/core/infrastructure/sp-config)
   (:export
    ;; Constants
    #:+saml-metadata-namespace-declaration+
@@ -41,7 +41,7 @@
    #:generate-sp-metadata
    #:generate-sp-metadata-xml))
 
-(in-package :cl-saml/src/core/domain/metadata/entity-descriptor)
+(in-package :cl-saml-lib/src/core/domain/metadata/entity-descriptor)
 
 (defclass-std:defclass/std entity-descriptor ()
   ((entity-id :type string)

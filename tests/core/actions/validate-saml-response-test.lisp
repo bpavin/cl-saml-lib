@@ -2,7 +2,7 @@
   (:use :cl)
   (:nicknames :validate-saml-response-test)
   (:import-from :rove)
-  (:import-from :cl-saml/src/core/app-ctx)
+  (:import-from :cl-saml-lib/src/core/app-ctx)
   (:export))
 
 (in-package :cl-saml/tests/core/actions/validate-saml-response-test)

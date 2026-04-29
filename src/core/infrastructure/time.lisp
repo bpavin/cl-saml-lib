@@ -1,4 +1,4 @@
-(defpackage :cl-saml/src/core/infrastructure/time
+(defpackage :cl-saml-lib/src/core/infrastructure/time
   (:use :cl)
   (:nicknames :time)
   (:import-from :local-time)
@@ -15,7 +15,7 @@
    #:past-saml-time
    #:skew-time))
 
-(in-package :cl-saml/src/core/infrastructure/time)
+(in-package :cl-saml-lib/src/core/infrastructure/time)
 
 ;;; Type Definitions
 (local-time:reread-timezone-repository)

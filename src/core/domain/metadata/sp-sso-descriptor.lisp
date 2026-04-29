@@ -1,14 +1,14 @@
-(defpackage :cl-saml/src/core/domain/metadata/sp-sso-descriptor
+(defpackage :cl-saml-lib/src/core/domain/metadata/sp-sso-descriptor
   (:use #:cl)
   (:nicknames :sp-sso-descriptor)
   (:import-from #:defclass-std)
-  (:import-from #:cl-saml/src/core/domain/saml/namespaces)
-  (:import-from #:cl-saml/src/core/infrastructure/xml)
-  (:import-from #:cl-saml/src/core/domain/metadata/role-descriptor)
-  (:import-from #:cl-saml/src/core/domain/metadata/organization)
-  (:import-from #:cl-saml/src/core/domain/metadata/key-descriptor)
-  (:import-from #:cl-saml/src/core/domain/metadata/contact-person)
-  (:import-from #:cl-saml/src/core/domain/metadata/endpoint)
+  (:import-from #:cl-saml-lib/src/core/domain/saml/namespaces)
+  (:import-from #:cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/role-descriptor)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/organization)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/key-descriptor)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/contact-person)
+  (:import-from #:cl-saml-lib/src/core/domain/metadata/endpoint)
   (:export
    ;; Class
    #:sp-sso-descriptor
@@ -25,7 +25,7 @@
    ;; XML Parse
    #:parse-spsso-descriptor-xml))
 
-(in-package :cl-saml/src/core/domain/metadata/sp-sso-descriptor)
+(in-package :cl-saml-lib/src/core/domain/metadata/sp-sso-descriptor)
 
 (defclass-std:defclass/std sp-sso-descriptor (role-descriptor:role-descriptor)
   ((authn-requests-signed :type (member t nil) :std nil)

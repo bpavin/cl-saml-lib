@@ -1,4 +1,4 @@
-(defpackage :cl-saml/src/core/infrastructure/idp-config
+(defpackage :cl-saml-lib/src/core/infrastructure/idp-config
   (:use :cl)
   (:nicknames :idp-config)
   (:import-from :defclass-std)
@@ -11,7 +11,7 @@
    #:slo-url
    #:get-idp-config))
 
-(in-package :cl-saml/src/core/infrastructure/idp-config)
+(in-package :cl-saml-lib/src/core/infrastructure/idp-config)
 
 (defclass-std:defclass/std idp-config ()
   ((entity-id :type string)

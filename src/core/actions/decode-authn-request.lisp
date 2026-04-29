@@ -1,17 +1,17 @@
-(defpackage :cl-saml/src/core/actions/decode-authn-request
+(defpackage :cl-saml-lib/src/core/actions/decode-authn-request
   (:use :cl)
   (:nicknames :decode-authn-request)
   (:import-from :defclass-std)
-  (:import-from :cl-saml/src/core/domain/saml/authn-request)
-  (:import-from :cl-saml/src/core/infrastructure/time)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/domain/saml/authn-request)
+  (:import-from :cl-saml-lib/src/core/infrastructure/time)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
   (:export
    #:decode-authn-request
    #:validation-error
    #:validation-error-message
    #:run))
 
-(in-package :cl-saml/src/core/actions/decode-authn-request)
+(in-package :cl-saml-lib/src/core/actions/decode-authn-request)
 
 ;;; Validation Error Condition
 

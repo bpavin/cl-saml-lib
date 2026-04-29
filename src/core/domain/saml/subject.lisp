@@ -1,10 +1,10 @@
-(defpackage :cl-saml/src/core/domain/saml/subject
+(defpackage :cl-saml-lib/src/core/domain/saml/subject
   (:use :cl)
   (:nicknames :subject)
-  (:import-from :cl-saml/src/core/infrastructure/identifiers)
-  (:import-from :cl-saml/src/core/infrastructure/time)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
-  (:import-from :cl-saml/src/core/domain/saml/name-id)
+  (:import-from :cl-saml-lib/src/core/infrastructure/identifiers)
+  (:import-from :cl-saml-lib/src/core/infrastructure/time)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/domain/saml/name-id)
   (:export
    #:subject
    ;; slots
@@ -25,7 +25,7 @@
    #:parse-subject-xml
    #:parse-subject-confirmation-xml))
 
-(in-package :cl-saml/src/core/domain/saml/subject)
+(in-package :cl-saml-lib/src/core/domain/saml/subject)
 ;;;
 ;;; Subject Structure
 

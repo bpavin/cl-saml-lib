@@ -1,4 +1,4 @@
-(defpackage :cl-saml/src/core/infrastructure/xml
+(defpackage :cl-saml-lib/src/core/infrastructure/xml
   (:use :cl)
   (:nicknames :xml)
   (:import-from :defclass-std)
@@ -26,7 +26,7 @@
    #:xml-canonicalize
    ))
 
-(in-package :cl-saml/src/core/infrastructure/xml)
+(in-package :cl-saml-lib/src/core/infrastructure/xml)
 
 ;;; Type Definitions
 

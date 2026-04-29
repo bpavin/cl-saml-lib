@@ -1,7 +1,7 @@
-(defpackage :cl-saml/src/core/domain/saml/saml-conditions
+(defpackage :cl-saml-lib/src/core/domain/saml/saml-conditions
   (:use :cl)
   (:nicknames :saml-conditions)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
   (:export
    #:conditions
    ;; slots
@@ -17,7 +17,7 @@
    #:parse-conditions-xml
    #:validate-conditions))
 
-(in-package :cl-saml/src/core/domain/saml/saml-conditions)
+(in-package :cl-saml-lib/src/core/domain/saml/saml-conditions)
 
 ;;; Conditions Structure
 

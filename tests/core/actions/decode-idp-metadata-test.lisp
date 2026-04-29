@@ -2,9 +2,9 @@
   (:use :cl)
   (:nicknames :decode-idp-metadata-test)
   (:import-from :rove)
-  (:import-from :cl-saml/src/core/app-ctx)
-  (:import-from :cl-saml/src/core/actions/decode-idp-metadata)
-  (:import-from :cl-saml/src/core/infrastructure/idp-config)
+  (:import-from :cl-saml-lib/src/core/app-ctx)
+  (:import-from :cl-saml-lib/src/core/actions/decode-idp-metadata)
+  (:import-from :cl-saml-lib/src/core/infrastructure/idp-config)
   (:export))
 
 (in-package :cl-saml/tests/core/actions/decode-idp-metadata-test)

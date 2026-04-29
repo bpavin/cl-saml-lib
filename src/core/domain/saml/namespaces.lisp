@@ -1,4 +1,4 @@
-(defpackage :cl-saml/src/core/domain/saml/namespaces
+(defpackage :cl-saml-lib/src/core/domain/saml/namespaces
   (:use :cl)
   (:nicknames :namespaces)
   (:export
@@ -29,7 +29,7 @@
    #:+saml-signature-uri+
    #:+authn-context-x509+))
 
-(in-package :cl-saml/src/core/domain/saml/namespaces)
+(in-package :cl-saml-lib/src/core/domain/saml/namespaces)
 
 ;;; SAML 2.0 Namespace URIs
 

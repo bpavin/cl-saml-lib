@@ -1,10 +1,10 @@
-(defpackage :cl-saml/src/core/domain/saml/issuer
+(defpackage :cl-saml-lib/src/core/domain/saml/issuer
   (:use :cl)
   (:nicknames :issuer)
-  (:import-from :cl-saml/src/core/infrastructure/identifiers)
-  (:import-from :cl-saml/src/core/infrastructure/time)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
-  (:import-from :cl-saml/src/core/domain/saml/namespaces)
+  (:import-from :cl-saml-lib/src/core/infrastructure/identifiers)
+  (:import-from :cl-saml-lib/src/core/infrastructure/time)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/domain/saml/namespaces)
 (:export
    #:issuer
    ;; slots
@@ -16,7 +16,7 @@
    #:build-issuer-xml
    #:parse-issuer-xml))
 
-(in-package :cl-saml/src/core/domain/saml/issuer)
+(in-package :cl-saml-lib/src/core/domain/saml/issuer)
 
 ;;; Issuer Structure
 

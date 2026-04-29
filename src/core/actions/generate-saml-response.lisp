@@ -1,17 +1,17 @@
-(defpackage :cl-saml/src/core/actions/generate-saml-response
+(defpackage :cl-saml-lib/src/core/actions/generate-saml-response
   (:use :cl)
   (:nicknames :generate-saml-response)
   (:import-from :defclass-std)
-  (:import-from :cl-saml/src/core/infrastructure/idp-config)
-  (:import-from :cl-saml/src/core/infrastructure/xml)
-  (:import-from :cl-saml/src/core/infrastructure/crypto-provider)
-  (:import-from :cl-saml/src/core/domain/saml/authn-request)
-  (:import-from :cl-saml/src/core/domain/saml/saml-status)
+  (:import-from :cl-saml-lib/src/core/infrastructure/idp-config)
+  (:import-from :cl-saml-lib/src/core/infrastructure/xml)
+  (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider)
+  (:import-from :cl-saml-lib/src/core/domain/saml/authn-request)
+  (:import-from :cl-saml-lib/src/core/domain/saml/saml-status)
   (:export
    #:generate-saml-response
    #:run))
 
-(in-package :cl-saml/src/core/actions/generate-saml-response)
+(in-package :cl-saml-lib/src/core/actions/generate-saml-response)
 
 (defclass-std:defclass/std generate-saml-response ()
   ((idp-config :type idp-config:idp-config)
