@@ -1,5 +1,5 @@
 ;;;; crypto-provider-impl-test.lisp
-(defpackage :cl-saml/tests/core/infrastructure/crypto-provider-impl-test
+(defpackage :cl-saml-lib/tests/core/infrastructure/crypto-provider-impl-test
   (:use :cl)
   (:import-from :rove)
   (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider-impl)
@@ -8,16 +8,16 @@
   (:import-from :uiop)
   (:export))
 
-(in-package :cl-saml/tests/core/infrastructure/crypto-provider-impl-test)
+(in-package :cl-saml-lib/tests/core/infrastructure/crypto-provider-impl-test)
 
 (defparameter +test-cert-path+
-  (asdf:system-relative-pathname :cl-saml "tests/resources/certs/cert.pem"))
+  (asdf:system-relative-pathname :cl-saml-lib "tests/resources/certs/cert.pem"))
 
 (defparameter +test-cert-2-path+
-  (asdf:system-relative-pathname :cl-saml "tests/resources/certs/cert-2.pem"))
+  (asdf:system-relative-pathname :cl-saml-lib "tests/resources/certs/cert-2.pem"))
 
 (defparameter +test-key-path+
-  (asdf:system-relative-pathname :cl-saml "tests/resources/certs/key.pem"))
+  (asdf:system-relative-pathname :cl-saml-lib "tests/resources/certs/key.pem"))
 
 (defparameter +test-xml+
   "<saml:Assertion xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">

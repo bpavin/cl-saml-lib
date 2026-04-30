@@ -1,10 +1,10 @@
-(defpackage :cl-saml/tests/core/domain/saml/saml-response-test
+(defpackage :cl-saml-lib/tests/core/domain/saml/saml-response-test
   (:use :cl)
   (:import-from :rove)
   (:import-from :cl-saml-lib/src/core/domain/saml/saml-response)
   (:export))
 
-(in-package :cl-saml/tests/core/domain/saml/saml-response-test)
+(in-package :cl-saml-lib/tests/core/domain/saml/saml-response-test)
 
 (defparameter *saml-response-1*
   "

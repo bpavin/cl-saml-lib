@@ -1,4 +1,4 @@
-(defpackage :cl-saml/tests/core/actions/decode-sp-metadata-test
+(defpackage :cl-saml-lib/tests/core/actions/decode-sp-metadata-test
   (:use :cl)
   (:nicknames :decode-sp-metadata-test)
   (:import-from :rove)
@@ -7,7 +7,7 @@
   (:import-from :cl-saml-lib/src/core/infrastructure/sp-config)
   (:export))
 
-(in-package :cl-saml/tests/core/actions/decode-sp-metadata-test)
+(in-package :cl-saml-lib/tests/core/actions/decode-sp-metadata-test)
 
 ;; Dummy SP Metadata XML with all fields (entity-id, certificate, ACS, SLO)
 (defparameter +sp-metadata-full+

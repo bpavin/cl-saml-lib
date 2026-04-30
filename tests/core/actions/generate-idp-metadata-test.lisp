@@ -1,11 +1,11 @@
-(defpackage :cl-saml/tests/core/actions/generate-idp-metadata-test
+(defpackage :cl-saml-lib/tests/core/actions/generate-idp-metadata-test
   (:use :cl)
   (:nicknames :generate-idp-metadata-test)
   (:import-from :rove)
   (:import-from :cl-saml-lib/src/core/app-ctx)
   (:export))
 
-(in-package :cl-saml/tests/core/actions/generate-idp-metadata-test)
+(in-package :cl-saml-lib/tests/core/actions/generate-idp-metadata-test)
 
 (defparameter app nil)
 

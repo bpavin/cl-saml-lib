@@ -1,4 +1,4 @@
-(defpackage :cl-saml/tests/core/actions/decode-idp-metadata-test
+(defpackage :cl-saml-lib/tests/core/actions/decode-idp-metadata-test
   (:use :cl)
   (:nicknames :decode-idp-metadata-test)
   (:import-from :rove)
@@ -7,7 +7,7 @@
   (:import-from :cl-saml-lib/src/core/infrastructure/idp-config)
   (:export))
 
-(in-package :cl-saml/tests/core/actions/decode-idp-metadata-test)
+(in-package :cl-saml-lib/tests/core/actions/decode-idp-metadata-test)
 
 ;; Dummy IDP Metadata XML with all fields (entity-id, certificate, SSO, SLO)
 (defparameter +idp-metadata-full+
@@ -68,7 +68,9 @@
     (rove:ok (typep result 'idp-config:idp-config) "Result is an idp-config instance")
     (rove:ok (string= (idp-config:entity-id result) "https://idp.example.com")
              "Entity ID is correctly parsed")
-    (rove:ok (string= (idp-config:idp-certificate result) "MIICpDCCAYwCCQDU+pQ4P3M3FTCCQDU+pQ4P3M3FTCCQDU+pQ4P3M3F")
+    (rove:ok (string= (idp-config:idp-certificate result) "-----BEGIN CERTIFICATE-----
+MIICpDCCAYwCCQDU+pQ4P3M3FTCCQDU+pQ4P3M3FTCCQDU+pQ4P3M3F
+-----END CERTIFICATE-----")
              "IDP certificate is correctly parsed")
     (rove:ok (string= (idp-config:sso-url result) "https://idp.example.com/sso/login")
              "SSO URL is correctly parsed")

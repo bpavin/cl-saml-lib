@@ -1,11 +1,11 @@
-(defpackage :cl-saml/tests/core/actions/validate-saml-response-test
+(defpackage :cl-saml-lib/tests/core/actions/validate-saml-response-test
   (:use :cl)
   (:nicknames :validate-saml-response-test)
   (:import-from :rove)
   (:import-from :cl-saml-lib/src/core/app-ctx)
   (:export))
 
-(in-package :cl-saml/tests/core/actions/validate-saml-response-test)
+(in-package :cl-saml-lib/tests/core/actions/validate-saml-response-test)
 
 (defparameter *saml-response-1*
   "
@@ -54,8 +54,10 @@
   (setf app (make-instance 'app-ctx:app-ctx)))
 
 (rove:deftest test-saml-validation
-  (let* ((action (app-ctx:validate-saml-response app))
+  (let* ((idp-config (app-ctx:idp-config app))
+         (action (app-ctx:validate-saml-response app))
          (validated (validate-saml-response:run action *saml-response-1*
+                                                idp-config
                                                 :verify-response-signature-p nil
                                                 :verify-assertions-signature-p nil)))
     (rove:ok validated "Exists validated object.")))

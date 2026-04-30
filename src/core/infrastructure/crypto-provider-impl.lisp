@@ -14,7 +14,7 @@
 (defclass-std:defclass/std crypto-provider-impl (crypto-provider:crypto-provider)
   ())
 
-(push (asdf:system-source-directory :cl-saml) cffi:*foreign-library-directories*)
+(push (asdf:system-source-directory :cl-saml-lib) cffi:*foreign-library-directories*)
 
 (cffi:define-foreign-library saml-signer
   (:unix (:default "src/xmlsec-wrapper/libsaml_signer")))

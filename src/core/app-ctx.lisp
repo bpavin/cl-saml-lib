@@ -89,7 +89,7 @@
         (make-instance 'generate-authn-request:generate-authn-request)))
 
 (defun create-idp-config ()
-  (let* ((project (asdf:system-source-directory :cl-saml))
+  (let* ((project (asdf:system-source-directory :cl-saml-lib))
          (private-raw (alexandria:read-file-into-string (merge-pathnames "certs/key.pem" project)))
          (cert-raw (alexandria:read-file-into-string (merge-pathnames "certs/cert.pem" project))))
     (make-instance 'idp-config:idp-config
@@ -99,7 +99,7 @@
                    :idp-certificate cert-raw)))
 
 (defun create-sp-config ()
-  (let* ((project (asdf:system-source-directory :cl-saml))
+  (let* ((project (asdf:system-source-directory :cl-saml-lib))
          (private-raw (alexandria:read-file-into-string (merge-pathnames "certs/key.pem" project)))
          (cert-raw (alexandria:read-file-into-string (merge-pathnames "certs/cert.pem" project))))
     (make-instance 'sp-config:sp-config

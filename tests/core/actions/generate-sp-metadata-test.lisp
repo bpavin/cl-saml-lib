@@ -1,4 +1,4 @@
-(defpackage :cl-saml/tests/core/actions/generate-sp-metadata-test
+(defpackage :cl-saml-lib/tests/core/actions/generate-sp-metadata-test
   (:use :cl)
   (:nicknames :generate-sp-metadata-test)
   (:import-from :rove)
@@ -7,7 +7,7 @@
   (:import-from :sp-config)
   (:export))
 
-(in-package :cl-saml/tests/core/actions/generate-sp-metadata-test)
+(in-package :cl-saml-lib/tests/core/actions/generate-sp-metadata-test)
 
 ;; Test parameters
 (defparameter +test-entity-id+ "https://example.com/sp")
