@@ -19,11 +19,65 @@
 #include "saml_signer.h"
 
 /* ---------------------------
-   Global init state
+   Error codes
 --------------------------- */
 
-static pthread_once_t g_xmlsec_once = PTHREAD_ONCE_INIT;
+typedef enum {
+    SAML_SIGNER_ERROR_INIT = -1,
+    SAML_SIGNER_SUCCESS = 0,
+    SAML_SIGNER_ERROR_INIT_FAILED = 10,
+    SAML_SIGNER_ERROR_XML_PARSE = 11,
+    SAML_SIGNER_ERROR_XPATH_NOT_FOUND = 12,
+    SAML_SIGNER_ERROR_TEMPLATE_CREATE = 13,
+    SAML_SIGNER_ERROR_REFERENCE_CREATE = 14,
+    SAML_SIGNER_ERROR_KEYINFO_CREATE = 15,
+    SAML_SIGNER_ERROR_DSIG_CTX_CREATE = 16,
+    SAML_SIGNER_ERROR_KEY_LOAD = 17,
+    SAML_SIGNER_ERROR_CERT_LOAD = 18,
+    SAML_SIGNER_ERROR_SIGN = 19,
+    SAML_SIGNER_ERROR_URI_MISMATCH = 20
+} saml_signer_error_t;
 
+/**
+ * Convert error code to string representation.
+ */
+const char* saml_signer_error_to_string(int error_code) {
+    switch (error_code) {
+        case SAML_SIGNER_ERROR_INIT:
+            return "Initialization failed";
+        case SAML_SIGNER_SUCCESS:
+            return "Success";
+        case SAML_SIGNER_ERROR_INIT_FAILED:
+            return "Signer initialization failed";
+        case SAML_SIGNER_ERROR_XML_PARSE:
+            return "XML parsing failed or no root element";
+        case SAML_SIGNER_ERROR_XPATH_NOT_FOUND:
+            return "XPath node not found";
+        case SAML_SIGNER_ERROR_TEMPLATE_CREATE:
+            return "Signature template creation failed or ID attribute not found";
+        case SAML_SIGNER_ERROR_REFERENCE_CREATE:
+            return "Reference creation failed or Signature node not found";
+        case SAML_SIGNER_ERROR_KEYINFO_CREATE:
+            return "KeyInfo/KeyManager/DSig context creation failed";
+        case SAML_SIGNER_ERROR_DSIG_CTX_CREATE:
+            return "DSig context creation or certificate loading failed";
+        case SAML_SIGNER_ERROR_KEY_LOAD:
+            return "Key is NULL or signature verification failed";
+        case SAML_SIGNER_ERROR_CERT_LOAD:
+            return "Certificate loading failed or no references exist";
+        case SAML_SIGNER_ERROR_SIGN:
+            return "xmlSecDSigCtxSign() failed";
+        case SAML_SIGNER_ERROR_URI_MISMATCH:
+            return "Reference URI mismatch";
+        default:
+            return "Unknown error";
+    }
+}
+
+/* ---------------------------
+   Global init state
+--------------------------- */
+static pthread_once_t g_xmlsec_once = PTHREAD_ONCE_INIT;
 static int g_xmlsec_ready = 0;
 static int g_xmlsec_failed = 0;
 static pthread_mutex_t g_xmlsec_lock = PTHREAD_MUTEX_INITIALIZER;
@@ -86,12 +140,12 @@ int saml_signer_init(void) {
     pthread_mutex_unlock(&g_xmlsec_lock);
 
     if (failed)
-        return -1;
+        return SAML_SIGNER_ERROR_INIT;
 
     if (!ok)
-        return -1;
+        return SAML_SIGNER_ERROR_INIT;
 
-    return 0;
+    return SAML_SIGNER_SUCCESS;
 }
 
 /* ---------------------------
@@ -177,16 +231,6 @@ static xmlSecDSigCtxPtr create_dsig_context(void) {
 }
 
 /* ---------------------------
-   Generic cleanup helper
---------------------------- */
-
-static void cleanup_xml_ctx(xmlSecDSigCtxPtr dsigCtx, xmlDocPtr doc) {
-    if(dsigCtx != NULL) xmlSecDSigCtxDestroy(dsigCtx);
-    if(doc != NULL) xmlFreeDoc(doc);
-    xmlCleanupParser();
-}
-
-/* ---------------------------
    Main signing function
 --------------------------- */
 
@@ -195,16 +239,15 @@ int sign_xml_xpath(const char *xml_input,
                    const char *key_pem,
                    const char *cert_pem,
                    char **signed_xml_out) {
-
-    if(saml_signer_init() != 0) return 10;
+    if(saml_signer_init() != 0) return SAML_SIGNER_ERROR_INIT_FAILED;
 
     xmlDocPtr doc = parse_xml_document(xml_input);
-    if(doc == NULL) return 11;
+    if(doc == NULL) return SAML_SIGNER_ERROR_XML_PARSE;
 
     xmlNodePtr target = find_node_by_xpath(doc, xpath_expr);
     if(target == NULL) {
         cleanup_signing(NULL, NULL, NULL, doc);
-        return 12;
+        return SAML_SIGNER_ERROR_XPATH_NOT_FOUND;
     }
 
     /* Ensure ID attribute is registered */
@@ -224,7 +267,7 @@ int sign_xml_xpath(const char *xml_input,
 
     if(signNode == NULL) {
         cleanup_signing(NULL, NULL, NULL, doc);
-        return 13;
+        return SAML_SIGNER_ERROR_TEMPLATE_CREATE;
     }
 
     /* Insert after Issuer (SAML convention) */
@@ -262,7 +305,7 @@ int sign_xml_xpath(const char *xml_input,
 
     if(ref == NULL) {
         cleanup_signing(NULL, NULL, signNode, doc);
-        return 14;
+        return SAML_SIGNER_ERROR_REFERENCE_CREATE;
     }
 
     xmlSecTmplReferenceAddTransform(ref, xmlSecTransformEnvelopedId);
@@ -272,7 +315,7 @@ int sign_xml_xpath(const char *xml_input,
     xmlNodePtr keyInfo = xmlSecTmplSignatureEnsureKeyInfo(signNode, NULL);
     if(keyInfo == NULL) {
         cleanup_signing(NULL, NULL, signNode, doc);
-        return 15;
+        return SAML_SIGNER_ERROR_KEYINFO_CREATE;
     }
 
     xmlSecTmplKeyInfoAddX509Data(keyInfo);
@@ -281,7 +324,7 @@ int sign_xml_xpath(const char *xml_input,
     xmlSecDSigCtxPtr dsigCtx = create_dsig_context();
     if(dsigCtx == NULL) {
         cleanup_signing(NULL, NULL, signNode, doc);
-        return 16;
+        return SAML_SIGNER_ERROR_DSIG_CTX_CREATE;
     }
 
     /* === KEY LOADED FROM MEMORY === */
@@ -294,7 +337,7 @@ int sign_xml_xpath(const char *xml_input,
 
     if(dsigCtx->signKey == NULL) {
         cleanup_signing(dsigCtx, NULL, signNode, doc);
-        return 17;
+        return SAML_SIGNER_ERROR_KEY_LOAD;
     }
 
     /* Attach certificate (optional but required for SAML interoperability) */
@@ -305,14 +348,14 @@ int sign_xml_xpath(const char *xml_input,
                 strlen(cert_pem),
                 xmlSecKeyDataFormatPem) < 0) {
             cleanup_signing(dsigCtx, NULL, signNode, doc);
-            return 18;
+            return SAML_SIGNER_ERROR_CERT_LOAD;
         }
     }
 
     /* Sign */
     if(xmlSecDSigCtxSign(dsigCtx, signNode) < 0) {
         cleanup_signing(dsigCtx, NULL, signNode, doc);
-        return 19;
+        return SAML_SIGNER_ERROR_SIGN;
     }
 
     /* Serialize full document */
@@ -328,7 +371,7 @@ int sign_xml_xpath(const char *xml_input,
     xmlSecDSigCtxDestroy(dsigCtx);
     xmlFreeDoc(doc);
 
-    return 0;
+    return SAML_SIGNER_SUCCESS;
 }
 
 /* ---------------------------
@@ -340,16 +383,16 @@ int verify_xml_signature_xpath(const char *xml_input,
                                const char *cert_pem)
 {
     if (saml_signer_init() != 0)
-        return 10;
+        return SAML_SIGNER_ERROR_INIT_FAILED;
 
     xmlDocPtr doc = parse_xml_document(xml_input);
     if (doc == NULL)
-        return 11;
+        return SAML_SIGNER_ERROR_XML_PARSE;
 
     xmlNodePtr root = xmlDocGetRootElement(doc);
     if (root == NULL) {
         xmlFreeDoc(doc);
-        return 11;
+        return SAML_SIGNER_ERROR_XML_PARSE;
     }
 
     /* -----------------------------
@@ -367,7 +410,7 @@ int verify_xml_signature_xpath(const char *xml_input,
     xmlNodePtr target = find_node_by_xpath(doc, xpath_expr);
     if (target == NULL) {
         xmlFreeDoc(doc);
-        return 12;
+        return SAML_SIGNER_ERROR_XPATH_NOT_FOUND;
     }
 
     /* Extract ID */
@@ -377,7 +420,7 @@ int verify_xml_signature_xpath(const char *xml_input,
 
     if (id == NULL) {
         xmlFreeDoc(doc);
-        return 13;
+        return SAML_SIGNER_ERROR_TEMPLATE_CREATE;
     }
 
     /* -----------------------------
@@ -402,7 +445,7 @@ int verify_xml_signature_xpath(const char *xml_input,
     if (sigNode == NULL) {
         xmlFree(id);
         xmlFreeDoc(doc);
-        return 14;
+        return SAML_SIGNER_ERROR_REFERENCE_CREATE;
     }
 
     /* -----------------------------
@@ -412,19 +455,19 @@ int verify_xml_signature_xpath(const char *xml_input,
     if (mngr == NULL) {
         xmlFree(id);
         xmlFreeDoc(doc);
-        return 15;
+        return SAML_SIGNER_ERROR_KEYINFO_CREATE;
     }
 
     if (xmlSecCryptoAppDefaultKeysMngrInit(mngr) < 0) {
         xmlSecKeysMngrDestroy(mngr);
         xmlFree(id);
         xmlFreeDoc(doc);
-        return 15;
+        return SAML_SIGNER_ERROR_KEYINFO_CREATE;
     }
 
     /* Load ONLY trusted IdP certificate */
     if (cert_pem != NULL) {
-        if (xmlSecCryptoAppKeysMngrCertLoadMemory(
+      if (xmlSecCryptoAppKeysMngrCertLoadMemory(
                 mngr,
                 (const xmlSecByte*)cert_pem,
                 strlen(cert_pem),
@@ -434,7 +477,7 @@ int verify_xml_signature_xpath(const char *xml_input,
             xmlSecKeysMngrDestroy(mngr);
             xmlFree(id);
             xmlFreeDoc(doc);
-            return 16;
+            return SAML_SIGNER_ERROR_DSIG_CTX_CREATE;
         }
     }
 
@@ -446,7 +489,7 @@ int verify_xml_signature_xpath(const char *xml_input,
         xmlSecKeysMngrDestroy(mngr);
         xmlFree(id);
         xmlFreeDoc(doc);
-        return 15;
+        return SAML_SIGNER_ERROR_KEYINFO_CREATE;
     }
 
     int ret = xmlSecDSigCtxVerify(dsigCtx, sigNode);
@@ -456,7 +499,7 @@ int verify_xml_signature_xpath(const char *xml_input,
         xmlSecKeysMngrDestroy(mngr);
         xmlFree(id);
         xmlFreeDoc(doc);
-        return 17;
+        return SAML_SIGNER_ERROR_KEY_LOAD;
     }
 
     /* Ensure references exist */
@@ -468,7 +511,7 @@ int verify_xml_signature_xpath(const char *xml_input,
         xmlSecKeysMngrDestroy(mngr);
         xmlFree(id);
         xmlFreeDoc(doc);
-        return 18;
+        return SAML_SIGNER_ERROR_CERT_LOAD;
     }
 
     /* Validate Reference URI matches expected ID */
@@ -492,7 +535,7 @@ int verify_xml_signature_xpath(const char *xml_input,
         xmlSecKeysMngrDestroy(mngr);
         xmlFree(id);
         xmlFreeDoc(doc);
-        return 20;
+        return SAML_SIGNER_ERROR_URI_MISMATCH;
     }
 
     /* Cleanup */
@@ -501,5 +544,5 @@ int verify_xml_signature_xpath(const char *xml_input,
     xmlFree(id);
     xmlFreeDoc(doc);
 
-    return 0;
+    return SAML_SIGNER_SUCCESS;
 }
