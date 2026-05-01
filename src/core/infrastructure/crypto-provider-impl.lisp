@@ -25,6 +25,9 @@
 
 (cffi:defcfun ("saml_signer_shutdown" %sign-shutdown) :void)
 
+(cffi:defcfun ("saml_signer_error_to_string" %error-to-string) :string
+  (error-code :int))
+
 (cffi:defcfun ("sign_xml_xpath" %sign-xml-xpath) :int
   (xml-input :string)
   (xpath-expr :string)
@@ -57,10 +60,10 @@
             (prog1
                 (cffi:foreign-string-to-lisp cstr)
               (cffi:foreign-free cstr)))
-          (error (format nil "Signing failed. [code=~A]" res))))))
+          (error (format nil "Signing failed. [code=~A, reason=~A]" res (%error-to-string res)))))))
 
 (defmethod crypto-provider:verify-signature (this xml xpath cert-pem &key algorithm)
   (let ((res (%verify-xml-xpath xml xpath cert-pem)))
     (if (zerop res)
         (log:info "Verification was successful. [code=~A]" res)
-        (error (format nil "Verification failed. [code=~A]" res)))))
+        (error (format nil "Verification failed. [code=~A, reason=~A]" res (%error-to-string res))))))
