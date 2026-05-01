@@ -66,7 +66,7 @@ const char* saml_signer_error_to_string(int error_code) {
         case SAML_SIGNER_ERROR_CERT_LOAD:
             return "Certificate loading failed or no references exist";
         case SAML_SIGNER_ERROR_SIGN:
-            return "xmlSecDSigCtxSign() failed";
+            return "Signing failed";
         case SAML_SIGNER_ERROR_URI_MISMATCH:
             return "Reference URI mismatch";
         default:
@@ -203,6 +203,9 @@ static xmlNodePtr find_node_by_xpath(xmlDocPtr doc, const char *xpath_expr) {
    Cleanup helper
 --------------------------- */
 
+/* Cleanup function for verification resources */
+static void cleanup_verification(xmlSecDSigCtxPtr dsigCtx, xmlSecKeysMngrPtr mngr, xmlChar *id, xmlDocPtr doc);
+
 static void cleanup_signing(xmlSecDSigCtxPtr dsigCtx, xmlNodePtr target, xmlNodePtr signNode, xmlDocPtr doc) {
     if(target != NULL) xmlFree(target);
     if(signNode != NULL) {
@@ -212,6 +215,21 @@ static void cleanup_signing(xmlSecDSigCtxPtr dsigCtx, xmlNodePtr target, xmlNode
     }
     if(dsigCtx != NULL) xmlSecDSigCtxDestroy(dsigCtx);
     if(doc != NULL) xmlFreeDoc(doc);
+}
+
+static void cleanup_verification(xmlSecDSigCtxPtr dsigCtx, xmlSecKeysMngrPtr mngr, xmlChar *id, xmlDocPtr doc) {
+    if (dsigCtx != NULL) {
+        xmlSecDSigCtxDestroy(dsigCtx);
+    }
+    if (mngr != NULL) {
+        xmlSecKeysMngrDestroy(mngr);
+    }
+    if (id != NULL) {
+        xmlFree(id);
+    }
+    if (doc != NULL) {
+        xmlFreeDoc(doc);
+    }
 }
 
 /* ---------------------------
@@ -391,7 +409,7 @@ int verify_xml_signature_xpath(const char *xml_input,
 
     xmlNodePtr root = xmlDocGetRootElement(doc);
     if (root == NULL) {
-        xmlFreeDoc(doc);
+        cleanup_verification(NULL, NULL, NULL, doc);
         return SAML_SIGNER_ERROR_XML_PARSE;
     }
 
@@ -409,7 +427,7 @@ int verify_xml_signature_xpath(const char *xml_input,
     /* Find target via XPath */
     xmlNodePtr target = find_node_by_xpath(doc, xpath_expr);
     if (target == NULL) {
-        xmlFreeDoc(doc);
+        cleanup_verification(NULL, NULL, NULL, doc);
         return SAML_SIGNER_ERROR_XPATH_NOT_FOUND;
     }
 
@@ -419,7 +437,7 @@ int verify_xml_signature_xpath(const char *xml_input,
         id = xmlGetProp(target, BAD_CAST "Id");
 
     if (id == NULL) {
-        xmlFreeDoc(doc);
+        cleanup_verification(NULL, NULL, NULL, doc);
         return SAML_SIGNER_ERROR_TEMPLATE_CREATE;
     }
 
@@ -443,8 +461,7 @@ int verify_xml_signature_xpath(const char *xml_input,
         xmlSecFindNode(target, xmlSecNodeSignature, xmlSecDSigNs);
 
     if (sigNode == NULL) {
-        xmlFree(id);
-        xmlFreeDoc(doc);
+        cleanup_verification(NULL, NULL, id, doc);
         return SAML_SIGNER_ERROR_REFERENCE_CREATE;
     }
 
@@ -453,15 +470,11 @@ int verify_xml_signature_xpath(const char *xml_input,
        ----------------------------- */
     xmlSecKeysMngrPtr mngr = xmlSecKeysMngrCreate();
     if (mngr == NULL) {
-        xmlFree(id);
-        xmlFreeDoc(doc);
+        cleanup_verification(NULL, NULL, id, doc);
         return SAML_SIGNER_ERROR_KEYINFO_CREATE;
     }
-
     if (xmlSecCryptoAppDefaultKeysMngrInit(mngr) < 0) {
-        xmlSecKeysMngrDestroy(mngr);
-        xmlFree(id);
-        xmlFreeDoc(doc);
+        cleanup_verification(NULL, mngr, id, doc);
         return SAML_SIGNER_ERROR_KEYINFO_CREATE;
     }
 
@@ -474,9 +487,7 @@ int verify_xml_signature_xpath(const char *xml_input,
                 xmlSecKeyDataFormatPem,
                 xmlSecKeyDataTypeTrusted) < 0) {
 
-            xmlSecKeysMngrDestroy(mngr);
-            xmlFree(id);
-            xmlFreeDoc(doc);
+            cleanup_verification(NULL, mngr, id, doc);
             return SAML_SIGNER_ERROR_DSIG_CTX_CREATE;
         }
     }
@@ -495,10 +506,7 @@ int verify_xml_signature_xpath(const char *xml_input,
     int ret = xmlSecDSigCtxVerify(dsigCtx, sigNode);
 
     if (ret < 0 || dsigCtx->status != xmlSecDSigStatusSucceeded) {
-        xmlSecDSigCtxDestroy(dsigCtx);
-        xmlSecKeysMngrDestroy(mngr);
-        xmlFree(id);
-        xmlFreeDoc(doc);
+        cleanup_verification(dsigCtx, mngr, id, doc);
         return SAML_SIGNER_ERROR_KEY_LOAD;
     }
 
@@ -507,10 +515,7 @@ int verify_xml_signature_xpath(const char *xml_input,
         xmlSecPtrListGetSize(&(dsigCtx->signedInfoReferences));
 
     if (refsSize == 0) {
-        xmlSecDSigCtxDestroy(dsigCtx);
-        xmlSecKeysMngrDestroy(mngr);
-        xmlFree(id);
-        xmlFreeDoc(doc);
+        cleanup_verification(dsigCtx, mngr, id, doc);
         return SAML_SIGNER_ERROR_CERT_LOAD;
     }
 
@@ -531,18 +536,12 @@ int verify_xml_signature_xpath(const char *xml_input,
     }
 
     if (!found) {
-        xmlSecDSigCtxDestroy(dsigCtx);
-        xmlSecKeysMngrDestroy(mngr);
-        xmlFree(id);
-        xmlFreeDoc(doc);
+        cleanup_verification(dsigCtx, mngr, id, doc);
         return SAML_SIGNER_ERROR_URI_MISMATCH;
     }
 
     /* Cleanup */
-    xmlSecDSigCtxDestroy(dsigCtx);
-    xmlSecKeysMngrDestroy(mngr);
-    xmlFree(id);
-    xmlFreeDoc(doc);
+    cleanup_verification(dsigCtx, mngr, id, doc);
 
     return SAML_SIGNER_SUCCESS;
 }
