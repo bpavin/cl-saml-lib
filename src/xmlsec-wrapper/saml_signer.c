@@ -33,9 +33,10 @@ typedef enum {
     SAML_SIGNER_ERROR_KEYINFO_CREATE = 15,
     SAML_SIGNER_ERROR_DSIG_CTX_CREATE = 16,
     SAML_SIGNER_ERROR_KEY_LOAD = 17,
-    SAML_SIGNER_ERROR_CERT_LOAD = 18,
-    SAML_SIGNER_ERROR_SIGN = 19,
-    SAML_SIGNER_ERROR_URI_MISMATCH = 20
+    SAML_SIGNER_ERROR_VERIFY = 18,
+    SAML_SIGNER_ERROR_CERT_LOAD = 19,
+    SAML_SIGNER_ERROR_SIGN = 20,
+    SAML_SIGNER_ERROR_URI_MISMATCH = 21
 } saml_signer_error_t;
 
 /**
@@ -62,7 +63,9 @@ const char* saml_signer_error_to_string(int error_code) {
         case SAML_SIGNER_ERROR_DSIG_CTX_CREATE:
             return "DSig context creation or certificate loading failed";
         case SAML_SIGNER_ERROR_KEY_LOAD:
-            return "Key is NULL or signature verification failed";
+            return "Key is NULL";
+        case SAML_SIGNER_ERROR_VERIFY:
+            return "Signature verification failed";
         case SAML_SIGNER_ERROR_CERT_LOAD:
             return "Certificate loading failed or no references exist";
         case SAML_SIGNER_ERROR_SIGN:
@@ -497,17 +500,19 @@ int verify_xml_signature_xpath(const char *xml_input,
        ----------------------------- */
     xmlSecDSigCtxPtr dsigCtx = xmlSecDSigCtxCreate(mngr);
     if (dsigCtx == NULL) {
-        xmlSecKeysMngrDestroy(mngr);
-        xmlFree(id);
-        xmlFreeDoc(doc);
+        cleanup_verification(NULL, mngr, id, doc);
         return SAML_SIGNER_ERROR_KEYINFO_CREATE;
     }
 
     int ret = xmlSecDSigCtxVerify(dsigCtx, sigNode);
 
-    if (ret < 0 || dsigCtx->status != xmlSecDSigStatusSucceeded) {
+    if (ret < 0) {
         cleanup_verification(dsigCtx, mngr, id, doc);
         return SAML_SIGNER_ERROR_KEY_LOAD;
+    }
+    if (dsigCtx->status != xmlSecDSigStatusSucceeded) {
+        cleanup_verification(dsigCtx, mngr, id, doc);
+        return SAML_SIGNER_ERROR_VERIFY;
     }
 
     /* Ensure references exist */
