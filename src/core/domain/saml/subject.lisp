@@ -52,6 +52,7 @@
 (defclass subject-confirmation ()
   ((method
     :initarg :method
+    :initform +confirmation-bearer+
     :reader confirmation-method
     :type string)
    (subject-confirmation-data
@@ -125,12 +126,9 @@ Returns: xml-element"))
                                  (mapcar #'build-subject-confirmation-xml confirmations)))))
 
 ;;; SubjectConfirmation XML Generation
-
-(defgeneric build-subject-confirmation-xml (subject-confirmation)
-  (:documentation "Build XML element for SubjectConfirmation.
-Returns: xml-element"))
-
 (defmethod build-subject-confirmation-xml ((conf subject-confirmation))
+  "Build XML element for SubjectConfirmation.
+Returns: xml-element"
   (let ((method (confirmation-method conf))
         (data (confirmation-data conf))
         (recipient (confirmation-recipient conf))
@@ -139,13 +137,16 @@ Returns: xml-element"))
         (not-before (confirmation-not-before conf))
         (address (confirmation-address conf)))
     (let ((attrs (list `("Method" ,method))))
-      (when recipient (push `("Recipient" ,recipient) attrs))
-      (when in-response-to (push `("InResponseTo" ,in-response-to) attrs))
+      (when recipient
+        (push `("Recipient" ,recipient) attrs))
+      (when in-response-to
+        (push `("InResponseTo" ,in-response-to) attrs))
       (when not-on-or-after 
         (push `("NotOnOrAfter" ,(time:format-saml-time not-on-or-after)) attrs))
       (when not-before
         (push `("NotBefore" ,(time:format-saml-time not-before)) attrs))
-      (when address (push `("Address" ,address) attrs))
+      (when address
+        (push `("Address" ,address) attrs))
       (xml:make-xml-element "saml:SubjectConfirmation"
                             :attributes attrs
                             :children (when data
