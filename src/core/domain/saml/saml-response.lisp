@@ -32,12 +32,13 @@
 (defclass saml-response ()
   ((id
     :initarg :id
+    :initform (identifiers:generate-saml-id)
     :reader id
     :type string)
    (issue-instant
     :initarg :issue-instant
     :initform (time:current-time)
-    :reader issue-instant
+    :accessor issue-instant
     :type integer)
    (in-response-to
     :initarg :in-response-to

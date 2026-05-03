@@ -9,7 +9,8 @@
   (:import-from :cl-saml-lib/src/core/domain/saml/saml-status)
   (:export
    #:generate-saml-response
-   #:run))
+   #:run
+   #:from-saml-response-object))
 
 (in-package :cl-saml-lib/src/core/actions/generate-saml-response)
 
@@ -17,7 +18,7 @@
   ((idp-config :type idp-config:idp-config)
    (crypto-provider :type crypto-provider:crypto-provider)))
 
-(defmethod run (this authn-request username user-attributes)
+(defmethod run ((this generate-saml-response) authn-request username user-attributes)
   "Generate SAML Response from AuthnRequest.
 THIS: generate-saml-response instance
 AUTHN-REQUEST: authn-request instance
@@ -34,8 +35,6 @@ Returns: signed SAMLResponse XML string"
                                    :subject subject))
          (status (make-instance 'saml-status:saml-status
                                 :status-code namespaces:+status-success+))
-         (issuer (make-instance 'issuer:issuer
-                                :value (idp-config:entity-id (idp-config this))))
          (response (saml-response:make-saml-response
                     status
                     :in-response-to (authn-request:id authn-request)
@@ -54,3 +53,26 @@ Returns: signed SAMLResponse XML string"
                                            (idp-config:idp-private-key (idp-config this))
                                            (idp-config:idp-certificate (idp-config this)))))
     signed-response))
+
+(defmethod from-saml-response-object ((this generate-saml-response) saml-response
+                                      idp-config
+                                      &key sign-response-p sign-assertions-p)
+
+  (let* ((assertions (saml-response:assertions saml-response))
+         (xml (saml-response:build-response-xml saml-response)))
+    (when sign-assertions-p
+      (dolist (assertion assertions)
+        (setf xml (crypto-provider:sign-xml (crypto-provider this)
+                                            xml
+                                            (format nil "//*[@ID='~A']" (assertion:id assertion))
+                                            (idp-config:idp-private-key idp-config)
+                                            (idp-config:idp-certificate idp-config)))))
+
+    (when sign-response-p
+      (setf xml (crypto-provider:sign-xml (crypto-provider this)
+                                          xml 
+                                          (format nil "//*[@ID='~A']" (saml-response:id saml-response))
+                                          (idp-config:idp-private-key idp-config)
+                                          (idp-config:idp-certificate idp-config))))
+
+    xml))
