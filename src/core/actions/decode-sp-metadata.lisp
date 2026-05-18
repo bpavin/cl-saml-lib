@@ -36,9 +36,15 @@ Returns sp-config on success."
            (key (find :signing kds :key #'key-descriptor:key-use)))
       (make-instance 'sp-config:sp-config
                      :entity-id (entity-descriptor:entity-id descriptor)
-                     :sp-certificate (when key (key-descriptor:key-certificate key))
+                     :sp-certificate (create-certificate key)
                      :acs-url acs-url
-                     :slo-url slo-url))))
+                     :slo-url slo-url
+                     :want-assertions-signed (sp-sso-descriptor:want-assertions-signed sp-desc)))))
+
+(defun create-certificate (key)
+  (when (and key (not (search "BEGIN " (key-descriptor:key-certificate key))))
+    (format nil "-----BEGIN CERTIFICATE-----~%~A~%-----END CERTIFICATE-----"
+            (key-descriptor:key-certificate key))))
 
 (define-condition validation-error (error)
   ())

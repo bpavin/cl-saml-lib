@@ -40,7 +40,7 @@ Returns sp-config on success."
                      :slo-url slo-url))))
 
 (defun create-certificate (key)
-  (when key
+  (when (and key (not (search "BEGIN " (key-descriptor:key-certificate key))))
     (format nil "-----BEGIN CERTIFICATE-----~%~A~%-----END CERTIFICATE-----"
             (key-descriptor:key-certificate key))))
 

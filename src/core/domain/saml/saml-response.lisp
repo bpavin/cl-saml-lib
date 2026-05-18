@@ -7,7 +7,7 @@
   (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider)
   (:import-from :cl-saml-lib/src/core/domain/saml/issuer)
   (:import-from :cl-saml-lib/src/core/domain/saml/saml-status)
-  (:import-from :cl-saml-lib/src/core/domain/saml/saml-status)
+  (:import-from :cl-saml-lib/src/core/domain/saml/saml-signature)
   (:import-from :cl-saml-lib/src/core/domain/saml/assertion)
   (:import-from :cl-saml-lib/src/core/domain/saml/namespaces)
   (:export
@@ -19,6 +19,7 @@
    #:destination
    #:issuer
    #:status
+   #:signature
    #:assertions
    #:version
 
@@ -59,6 +60,10 @@
     :initarg :status
     :reader status
     :type saml-status)
+   (signature
+    :initarg :signature
+    :reader signature
+    :type saml-signature)
    (assertions
     :initarg :assertions
     :reader assertions
@@ -112,19 +117,6 @@ Returns: xml-element"))
                         :attributes attrs
                         :children (nreverse children)))))
 
-;;; Response Signing
-
-(defgeneric sign-response (response private-key &key algorithm)
-  (:documentation "Sign a response.
-RESPONSE: saml-response object
-PRIVATE-KEY: private key for signing
-ALGORITHM: signature algorithm
-Returns: signed xml-element")
-  (:method ((resp saml-response) private-key
-            &key (algorithm crypto-provider:+signature-rsa-sha256+))
-    (declare (ignorable private-key algorithm))
-    (error 'saml-error :message "sign-response: Must specialize for crypto implementation")))
-
 ;;; Response XML Parsing
 
 (defgeneric parse-response-xml (element)
@@ -148,6 +140,8 @@ Returns: saml-response"))
          (issuer (when issuer-el (issuer:parse-issuer-xml issuer-el)))
          (status-el (xml:xml-find-element element "saml:Status | saml2p:Status"))
          (status (when status-el (saml-status:parse-status-xml status-el)))
+         (signature-el (xml:xml-find-element element "ds:Signature"))
+         (signature (when signature-el (saml-signature:parse-signature-xml signature-el)))
          (assertion-els (xml:xml-find-elements element "saml:Assertion | saml2:Assertion"))
          (assertions (mapcar #'assertion:parse-assertion-xml assertion-els)))
     (make-instance 'saml-response
@@ -158,6 +152,7 @@ Returns: saml-response"))
                    :destination destination
                    :issuer issuer
                    :status status
+                   :signature signature
                    :assertions assertions)))
 
 ;;; Response to String

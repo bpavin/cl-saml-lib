@@ -5,6 +5,7 @@
   (:import-from :cffi)
   (:import-from :defclass-std)
   (:import-from :cl-saml-lib/src/core/infrastructure/crypto-provider)
+  (:import-from :cl-saml-lib/src/core/infrastructure/saml-error)
   (:export
    #:crypto-provider-impl
    #:cleanup))
@@ -60,10 +61,15 @@
             (prog1
                 (cffi:foreign-string-to-lisp cstr)
               (cffi:foreign-free cstr)))
-          (error (format nil "Signing failed. [code=~A, reason=~A]" res (%error-to-string res)))))))
+          (error 'saml-error:signing-error
+                 :code res
+                 :text (%error-to-string res))))))
 
 (defmethod crypto-provider:verify-signature (this xml xpath cert-pem &key algorithm)
   (let ((res (%verify-xml-xpath xml xpath cert-pem)))
     (if (zerop res)
+
         (log:info "Verification was successful. [code=~A]" res)
-        (error (format nil "Verification failed. [code=~A, reason=~A]" res (%error-to-string res))))))
+        (signal 'saml-error:signature-verification-error
+                :code res
+                :text (%error-to-string res)))))

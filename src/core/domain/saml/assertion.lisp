@@ -15,6 +15,7 @@
    ;; slots
    #:id
    #:issue-instant
+   #:signature
    #:issuer
    #:subject
    #:conditions
@@ -45,6 +46,9 @@
     :initform (time:current-time)
     :type integer
     :documentation "When the assertion was issued")
+   (signature
+    :initarg :signature
+    :reader signature)
    (issuer
     :initarg :issuer
     :reader issuer
@@ -114,7 +118,8 @@ Returns: xml-element"))
     (xml:make-xml-element "saml:Assertion"
                           :attributes `(("ID" ,(id assert))
                                         ("Version" ,(version assert))
-                                        ("IssueInstant" ,(time:format-saml-time (issue-instant assert))))
+                                        ,(when (issue-instant assert)
+                                           `("IssueInstant" ,(time:format-saml-time (issue-instant assert)))))
                       :children (nreverse children))))
 
 ;;; Assertion Signing
@@ -143,6 +148,8 @@ Returns: assertion"))
          (issue-instant-str (xml:xml-get-attribute element "IssueInstant"))
          (issue-instant (when issue-instant-str
                           (time:parse-saml-time issue-instant-str)))
+         (signature-el (xml:xml-find-element element "ds:Signature"))
+         (signature (when signature-el (saml-signature:parse-signature-xml signature-el)))
          (issuer-el (xml:xml-find-element element "saml:Issuer | saml2:Issuer"))
          (issuer (when issuer-el (issuer:parse-issuer-xml issuer-el)))
          (subject-el (xml:xml-find-element element "saml:Subject | saml2:Subject"))
@@ -157,6 +164,7 @@ Returns: assertion"))
                    :id id
                    :version (or version "2.0")
                    :issue-instant issue-instant
+                   :signature signature
                    :issuer issuer
                    :subject subject
                    :conditions conditions

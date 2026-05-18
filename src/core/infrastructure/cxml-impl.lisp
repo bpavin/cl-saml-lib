@@ -52,8 +52,9 @@ NAMESPACE: optional namespace URI"
     (cxml:with-xml-output sink
       (cxml:with-element* (namespace tag)
         (dolist (attr attributes)
-          (destructuring-bind (attr-name attr-val) attr
-            (cxml:attribute attr-name attr-val)))
+          (when attr
+            (destructuring-bind (attr-name attr-val) attr
+              (cxml:attribute attr-name attr-val))))
         (dolist (child children)
           (cxml:unescaped child))
         (when text (cxml:text text))))))

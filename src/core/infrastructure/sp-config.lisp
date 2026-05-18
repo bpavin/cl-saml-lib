@@ -9,7 +9,8 @@
    #:sp-certificate
    #:acs-url
    #:slo-url
-   #:get-sp-config))
+   #:get-sp-config
+   #:want-assertions-signed))
 
 (in-package :cl-saml-lib/src/core/infrastructure/sp-config)
 
@@ -18,4 +19,5 @@
    (sp-private-key :type t)
    (sp-certificate :type t)
    (acs-url :type (or null string))
-   (slo-url :type (or null string))))
+   (slo-url :type (or null string))
+   (want-assertions-signed)))

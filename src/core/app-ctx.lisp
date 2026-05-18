@@ -19,6 +19,8 @@
    #:app-ctx
    #:idp-config
    #:sp-config
+   #:crypto-provider
+   #:xml-parser
    #:decode-authn-request
    #:validate-authn-request
    #:validate-saml-response

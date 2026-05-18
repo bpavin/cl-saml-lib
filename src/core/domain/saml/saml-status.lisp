@@ -6,6 +6,8 @@
   (:import-from :cl-saml-lib/src/core/infrastructure/xml)
   (:export
    #:saml-status
+   #:saml-status-code
+   #:saml-status-message
    #:parse-status-xml
    #:build-status-xml))
 
@@ -35,7 +37,7 @@
 
 (defun status-success-p (status)
   "Check if status indicates success."
-  (string= (saml-status-code status) +status-success+))
+  (string= (saml-status-code status) namespaces:+status-success+))
 
 ;;; Status XML Generation
 
@@ -73,16 +75,16 @@ Returns: saml-status"))
 
 (defun make-status-success ()
   "Create a success status."
-  (make-saml-status +status-success+))
+  (make-saml-status namespaces:+status-success+))
 
 (defun make-status-requester (&optional message)
   "Create a Requester error status."
-  (make-saml-status +status-requester+ message))
+  (make-saml-status namespaces:+status-requester+ message))
 
 (defun make-status-responder (&optional message)
   "Create a Responder error status."
-  (make-saml-status +status-responder+ message))
+  (make-saml-status namespaces:+status-responder+ message))
 
 (defun make-status-version-mismatch (&optional message)
   "Create a VersionMismatch error status."
-  (make-saml-status +status-version-mismatch+ message))
+  (make-saml-status namespaces:+status-version-mismatch+ message))

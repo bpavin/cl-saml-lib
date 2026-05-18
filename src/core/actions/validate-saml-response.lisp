@@ -16,7 +16,7 @@
   ((xml-parser :type xml:xml-parser)
    (crypto-provider :type crypto-provider:crypto-provider)))
 
-(defmethod run ((this validate-saml-response) saml-response-xml idp-config
+(defmethod run ((this validate-saml-response) saml-response-xml sp-config
                 &key (verify-response-signature-p T) (verify-assertions-signature-p T))
   (let* ((xml (xml:parse-xml (xml-parser this) saml-response-xml))
          (response (saml-response:parse-response-xml xml))
@@ -27,18 +27,18 @@
                         (format nil "//*[@ID='~A']" (saml-response:id response))
                         (format nil "/*"))))
 
-        (log:info "Verifing node with id = ~A" xpath)
+        (log:trace "Verifing node with id = ~A" xpath)
         (crypto-provider:verify-signature (crypto-provider this)
                                           saml-response-xml
                                           xpath
-                                          (idp-config:idp-certificate idp-config))))
+                                          (sp-config:sp-certificate sp-config))))
 
     (when verify-assertions-signature-p
       (dolist (assertion (saml-response:assertions response))
-        (log:info "Verifing node with id = //*[@ID='~A']" (assertion:id assertion))
+        (log:trace "Verifing node with id = //*[@ID='~A']" (assertion:id assertion))
         (crypto-provider:verify-signature (crypto-provider this)
                                           saml-response-xml
                                           (format nil "//*[@ID='~A']" (assertion:id assertion))
-                                          (idp-config:idp-certificate idp-config))))
+                                          (sp-config:sp-certificate sp-config))))
 
     response))

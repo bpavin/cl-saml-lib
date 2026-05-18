@@ -13,6 +13,7 @@
    #:+nameid-format-persistent+
    #:+nameid-format-transient+
    #:+status-success+
+   #:+status-requester+
    #:+status-responder+
    #:+status-version-mismatch+
    #:+authn-context-password+

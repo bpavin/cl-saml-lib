@@ -140,7 +140,7 @@
 (defmethod generate-metadata ((config sp-config:sp-config))
   "Generate SP metadata from SP configuration."
   (let* ((entity-id (sp-config:entity-id config))
-         (certificate (sp-config:sp-certificate config))
+         (certificate (strip-cert-header-footer (sp-config:sp-certificate config)))
          (acs-url (sp-config:acs-url config))
          (slo-url (sp-config:slo-url config)))
     ;; Create ACS endpoint (AssertionConsumerService)
@@ -175,7 +175,7 @@
 (defmethod generate-metadata ((config idp-config:idp-config))
   "Generate IDP metadata from IDP configuration."
   (let* ((entity-id (idp-config:entity-id config))
-         (certificate (idp-config:idp-certificate config))
+         (certificate (strip-cert-header-footer (idp-config:idp-certificate config)))
          (sso-url (idp-config:sso-url config))
          (slo-url (idp-config:slo-url config))
 
@@ -212,6 +212,9 @@
                                       :idp-descriptor idp-descriptor)))
 
       entity-desc)))
+
+(defun strip-cert-header-footer (cert)
+  (cl-ppcre:regex-replace-all "(-----BEGIN CERTIFICATE-----|-----END CERTIFICATE-----|\\n)" cert ""))
 
 (defmethod generate-idp-metadata-xml (config)
   "Generate IDP metadata XML from idp-config.
