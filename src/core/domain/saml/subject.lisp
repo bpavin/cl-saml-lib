@@ -23,7 +23,10 @@
    #:build-subject-xml
    #:build-subject-confirmation-xml
    #:parse-subject-xml
-   #:parse-subject-confirmation-xml))
+   #:parse-subject-confirmation-xml
+   #:+confirmation-bearer+
+   #:+confirmation-holder-of-key+
+   #:+confirmation-sender-vouches+))
 
 (in-package :cl-saml-lib/src/core/domain/saml/subject)
 ;;;

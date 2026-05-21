@@ -56,7 +56,9 @@ Returns: signed SAMLResponse XML string"
 
 (defmethod from-saml-response-object ((this generate-saml-response) saml-response
                                       idp-config
-                                      &key sign-response-p sign-assertions-p)
+                                      &key sign-response-p sign-assertions-p
+                                        (signature-algorithm nil)
+                                        (digest-algorithm nil))
 
   (let* ((assertions (saml-response:assertions saml-response))
          (xml (saml-response:build-response-xml saml-response)))
@@ -66,13 +68,17 @@ Returns: signed SAMLResponse XML string"
                                             xml
                                             (format nil "//*[@ID='~A']" (assertion:id assertion))
                                             (idp-config:idp-private-key idp-config)
-                                            (idp-config:idp-certificate idp-config)))))
+                                            (idp-config:idp-certificate idp-config)
+                                            :signature-algorithm signature-algorithm
+                                            :digest-algorithm digest-algorithm))))
 
     (when sign-response-p
       (setf xml (crypto-provider:sign-xml (crypto-provider this)
                                           xml 
                                           (format nil "//*[@ID='~A']" (saml-response:id saml-response))
                                           (idp-config:idp-private-key idp-config)
-                                          (idp-config:idp-certificate idp-config))))
+                                          (idp-config:idp-certificate idp-config)
+                                          :signature-algorithm signature-algorithm
+                                          :digest-algorithm digest-algorithm)))
 
     xml))
