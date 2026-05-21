@@ -158,8 +158,7 @@ Returns: (values valid-p error-message)")
           (values nil "Assertion not yet valid (NotBefore)")))
       
       (when (and (conditions-not-on-or-after c)
-                 (time:time-greater-than now
-                                                          (conditions-not-on-or-after c)))
+                 (time:time-greater-than now (conditions-not-on-or-after c)))
         (return-from validate-conditions 
           (values nil "Assertion expired (NotOnOrAfter)")))
       

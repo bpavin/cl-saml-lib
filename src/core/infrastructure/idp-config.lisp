@@ -14,9 +14,13 @@
 (in-package :cl-saml-lib/src/core/infrastructure/idp-config)
 
 (defclass-std:defclass/std idp-config ()
-  ((entity-id :type string)
-   (idp-private-key :type t)
-   (idp-certificate :type t)
-   (sso-url :type (or null string))
-   (slo-url :type (or null string))))
-
+  ((entity-id :type string
+              :doc "The unique Entity ID (issuer identifier) for the Identity Provider")
+   (idp-private-key :type t
+                    :doc "The Identity Provider's private key (PEM string)")
+   (idp-certificate :type t
+                    :doc "The Identity Provider's X.509 certificate (PEM string)")
+   (sso-url :type (or null string)
+            :doc "The Single Sign-On URL for SAML authentication requests")
+   (slo-url :type (or null string)
+            :doc "The Single Logout Service URL for logout requests")))
