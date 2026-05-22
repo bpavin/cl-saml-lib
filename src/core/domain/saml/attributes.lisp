@@ -22,7 +22,6 @@
    ;; slots
    #:attribute-statement-attributes
 
-   #:make-attribute-statement
    #:build-attributestatement-xml
    #:parse-attributestatement-xml
    #:make-email-attribute
@@ -31,6 +30,9 @@
    #:map-user-to-attributes))
 
 (in-package :cl-saml-lib/src/core/domain/saml/attributes)
+
+(defparameter +attrname-format-unspecified+
+    "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified")
 
 ;;; Attribute Structure
 
@@ -61,8 +63,7 @@
   (make-instance 'saml-attribute
                  :name name
                  :friendly-name friendly-name
-                 :name-format (or name-format 
-                                  "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified")
+                 :name-format name-format
                  :values (mapcar #'princ-to-string values)))
 
 ;;; AttributeValue
@@ -122,10 +123,6 @@ Returns: saml-attribute"))
     :type list
     :initform nil))
   (:documentation "Container for attributes."))
-
-(defun make-attribute-statement (&rest attributes)
-  "Create an AttributeStatement with given attributes."
-  (make-instance 'attribute-statement :attributes attributes))
 
 ;;; AttributeStatement XML Generation
 
