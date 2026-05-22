@@ -53,7 +53,7 @@
 (defmethod cleanup ((this crypto-provider-impl))
   (%sign-shutdown))
 
-(defmethod crypto-provider:sign-xml ((this crypto-provider-impl) xml xpath key-pem cert-pem &key algorithm digest)
+(defmethod crypto-provider:sign-xml ((this crypto-provider-impl) xml xpath key-pem cert-pem &key signature-algorithm digest-algorithm)
   (cffi:with-foreign-object (out :pointer)
     (let ((res (%sign-xml-xpath xml xpath key-pem cert-pem out)))
       (if (zerop res)

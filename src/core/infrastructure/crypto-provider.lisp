@@ -85,7 +85,7 @@ CERTIFICATE: certificate
 Returns: public-key"))
 
 ;;; Signing Operations
-(defgeneric sign-xml (this xml xpath private-key-pem cert-pem &key algorithm digest)
+(defgeneric sign-xml (this xml xpath private-key-pem cert-pem &key signature-algorithm digest-algorithm)
   (:documentation "Sign data with private key.
    
    DATA: String or octet array to sign
