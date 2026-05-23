@@ -16,9 +16,9 @@
 (defclass-std:defclass/std idp-config ()
   ((entity-id :type string
               :doc "The unique Entity ID (issuer identifier) for the Identity Provider")
-   (idp-private-key :type t
+   (idp-private-key :type (or null string)
                     :doc "The Identity Provider's private key (PEM string)")
-   (idp-certificate :type t
+   (idp-certificate :type (or null string) 
                     :doc "The Identity Provider's X.509 certificate (PEM string)")
    (sso-url :type (or null string)
             :doc "The Single Sign-On URL for SAML authentication requests")

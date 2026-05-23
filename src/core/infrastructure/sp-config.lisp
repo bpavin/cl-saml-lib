@@ -17,9 +17,9 @@
 (defclass-std:defclass/std sp-config ()
   ((entity-id :type string
               :doc "The unique Entity ID (issuer identifier) for the Service Provider")
-   (sp-private-key :type t
+   (sp-private-key :type (or null string)
                    :doc "The Service Provider's private key (PEM string)")
-   (sp-certificate :type t
+   (sp-certificate :type (or null string)
                    :doc "The Service Provider's X.509 certificate (PEM string)")
    (acs-url :type (or null string)
             :doc "The Assertion Consumer Service URL where SAML responses are sent")
