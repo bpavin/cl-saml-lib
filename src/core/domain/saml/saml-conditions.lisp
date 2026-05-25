@@ -134,7 +134,6 @@ Returns: conditions"))
          (one-time-use (xml:xml-find-element element "saml:OneTimeUse | saml2:OneTimeUse"))
          (proxy-el (xml:xml-find-element element "saml:ProxyRestriction | saml2:ProxyRestriction"))
          (proxy-count (when proxy-el
-                        (break)
                         (let ((count-str (xml:xml-get-attribute proxy-el "Count")))
                           (when count-str (parse-integer count-str))))))
     (make-conditions
