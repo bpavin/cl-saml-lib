@@ -86,11 +86,10 @@ Returns: xml-element"
                       (list (name-id:build-nameid-xml name-id-val)))
                     (when session-index-val
                       (list (xml:make-xml-element
-                             (format nil "~A:SessionIndex"
-                                     namespaces:+saml-protocol-namespace+)
+                             "saml:SessionIndex"
                              :children (list session-index-val)))))))
     (xml:make-xml-element
-     (format nil "~A:LogoutRequest" namespaces:+saml-protocol-namespace+)
+     "samlp:LogoutRequest"
      :attributes attrs
      :children children
      :namespace namespaces:+saml-protocol-uri+)))
@@ -104,10 +103,8 @@ Returns: xml-element"
 SOURCE: xml-document or xml-element
 Returns: logout-request"
   (let ((element (if (typep source 'xml:xml-document)
-                     (xml:xml-find-element source
-                       (format nil "//~A:LogoutRequest"
-                               namespaces:+saml-protocol-namespace+)
-                       namespaces:+saml-namespace-declaration+)
+                     (xml:xml-find-element
+                      source "/samlp:LogoutRequest | /saml2p:LogoutRequest")
                      source)))
     (unless element
       (error "parse-logout-request-xml: No LogoutRequest element found"))
@@ -118,16 +115,12 @@ Returns: logout-request"
            (not-on-or-after-str (xml:xml-get-attribute element "NotOnOrAfter"))
            (consent-val (xml:xml-get-attribute element "Consent"))
            ;; Parse child elements
-           (issuer-elem (xml:xml-find-element element
-                         (format nil "~A:Issuer" "saml")
-                         namespaces:+saml-namespace-declaration+))
-           (name-id-elem (xml:xml-find-element element
-                          (format nil "~A:NameID" "saml")
-                          namespaces:+saml-namespace-declaration+))
-           (session-index-elem (xml:xml-find-element element
-                                (format nil "~A:SessionIndex"
-                                        namespaces:+saml-protocol-namespace+)
-                                namespaces:+saml-namespace-declaration+)))
+           (issuer-elem (xml:xml-find-element
+                         element "saml:Issuer | saml2:Issuer"))
+           (name-id-elem (xml:xml-find-element
+                          element "saml:NameID | saml2:NameID"))
+           (session-index-elem (xml:xml-find-element
+                                element "saml:SessionIndex | saml2:SessionIndex")))
       (make-instance 'logout-request
                      :id id-val
                      :issue-instant (when issue-instant-str
@@ -208,7 +201,7 @@ IDP-CONFIG: idp-config instance.
 NAME-ID: optional name-id for the user session to terminate.
 SESSION-INDEX: optional session index string.
 Returns: XML string"
-  (let ((logout-req (generate-logout-request-from-config idp-config
-                                                         :name-id name-id
-                                                         :session-index session-index)))
+  (let ((logout-req (generate-logout-request-from-config
+                     idp-config :name-id name-id
+                                :session-index session-index)))
     (logout-request-to-string logout-req)))

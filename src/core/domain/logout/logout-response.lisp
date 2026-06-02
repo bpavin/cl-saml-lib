@@ -77,7 +77,7 @@ Returns: xml-element"
                     (when status-val
                       (list (saml-status:build-status-xml status-val))))))
     (xml:make-xml-element
-     (format nil "~A:LogoutResponse" namespaces:+saml-protocol-namespace+)
+     "samlp:LogoutResponse"
      :attributes attrs
      :children children
      :namespace namespaces:+saml-protocol-uri+)))
@@ -91,10 +91,8 @@ Returns: xml-element"
 SOURCE: xml-document or xml-element
 Returns: logout-response"
   (let ((element (if (typep source 'xml:xml-document)
-                     (xml:xml-find-element source
-                       (format nil "//~A:LogoutResponse"
-                               namespaces:+saml-protocol-namespace+)
-                       namespaces:+saml-namespace-declaration+)
+                     (xml:xml-find-element
+                      source "/samlp:LogoutResponse | /saml2p:LogoutResponse")
                      source)))
     (unless element
       (error "parse-logout-response-xml: No LogoutResponse element found"))
@@ -104,13 +102,8 @@ Returns: logout-response"
            (destination-val (xml:xml-get-attribute element "Destination"))
            (in-response-to-val (xml:xml-get-attribute element "InResponseTo"))
            ;; Parse child elements
-           (issuer-elem (xml:xml-find-element element
-                         (format nil "~A:Issuer" "saml")
-                         namespaces:+saml-namespace-declaration+))
-           (status-elem (xml:xml-find-element element
-                         (format nil "~A:Status"
-                                 namespaces:+saml-protocol-namespace+)
-                         namespaces:+saml-namespace-declaration+)))
+           (issuer-elem (xml:xml-find-element element "saml:Issuer"))
+           (status-elem (xml:xml-find-element element "samlp:Status")))
       (make-instance 'logout-response
                      :id id-val
                      :issue-instant (when issue-instant-str
