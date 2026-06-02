@@ -70,7 +70,9 @@
     (rove:ok (typep result 'sp-config:sp-config) "Result is an sp-config instance")
     (rove:ok (string= (sp-config:entity-id result) "https://sp.example.com")
              "Entity ID is correctly parsed")
-    (rove:ok (string= (sp-config:sp-certificate result) "MIICpDCCAYwCCQDU+pQ4P3M3FTCCQDU+pQ4P3M3FTCCQDU+pQ4P3M3F")
+    (rove:ok (string= (sp-config:sp-certificate result) "-----BEGIN CERTIFICATE-----
+MIICpDCCAYwCCQDU+pQ4P3M3FTCCQDU+pQ4P3M3FTCCQDU+pQ4P3M3F
+-----END CERTIFICATE-----")
              "SP certificate is correctly parsed")
     (rove:ok (string= (sp-config:acs-url result) "https://sp.example.com/acs")
              "ACS URL is correctly parsed")
