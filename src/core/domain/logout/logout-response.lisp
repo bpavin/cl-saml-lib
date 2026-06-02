@@ -63,7 +63,9 @@ Returns: xml-element"
          (status-val (status logout-resp))
          ;; Build attributes
          (attrs (append
-                 `(("ID" ,id-val)
+                 `(("xmlns:samlp" #.namespaces:+saml-protocol-uri+)
+                   ("xmlns:saml" #.namespaces:+saml-uri+)
+                   ("ID" ,id-val)
                    ("Version" ,version-val)
                    ("IssueInstant" ,issue-instant-val))
                  (when destination-val
@@ -79,8 +81,7 @@ Returns: xml-element"
     (xml:make-xml-element
      "samlp:LogoutResponse"
      :attributes attrs
-     :children children
-     :namespace namespaces:+saml-protocol-uri+)))
+     :children children)))
 
 ;;; ──────────────────────────────────────────────
 ;;; XML Parsing

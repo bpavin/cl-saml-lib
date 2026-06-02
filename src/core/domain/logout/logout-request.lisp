@@ -69,7 +69,9 @@ Returns: xml-element"
          (session-index-val (session-index logout-req))
          ;; Build attributes
          (attrs (append
-                 `(("ID" ,id-val)
+                 `(("xmlns:samlp" #.namespaces:+saml-protocol-uri+)
+                   ("xmlns:saml" #.namespaces:+saml-uri+)
+                   ("ID" ,id-val)
                    ("Version" ,version-val)
                    ("IssueInstant" ,issue-instant-val))
                  (when destination-val
@@ -91,8 +93,7 @@ Returns: xml-element"
     (xml:make-xml-element
      "samlp:LogoutRequest"
      :attributes attrs
-     :children children
-     :namespace namespaces:+saml-protocol-uri+)))
+     :children children)))
 
 ;;; ──────────────────────────────────────────────
 ;;; XML Parsing
