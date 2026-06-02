@@ -39,7 +39,7 @@
 
 (defclass-std:defclass/std logout-response ()
   ((id :type string)
-   (issue-instant :type time:saml-timestamp)
+   (issue-instant :type local-time:timestamp)
    (version :type string)
    (destination :type (or null string))
    (in-response-to :type (or null string))
@@ -111,17 +111,17 @@ Returns: logout-response"
                          (format nil "~A:Status"
                                  namespaces:+saml-protocol-namespace+)
                          namespaces:+saml-namespace-declaration+)))
-      (make-logout-response
-       :id id-val
-       :issue-instant (when issue-instant-str
-                        (time:parse-saml-time issue-instant-str))
-       :version (or version-val "2.0")
-       :destination destination-val
-       :in-response-to in-response-to-val
-       :issuer (when issuer-elem
-                 (issuer:parse-issuer-xml issuer-elem))
-       :status (when status-elem
-                 (saml-status:parse-status-xml status-elem))))))
+      (make-instance 'logout-response
+                     :id id-val
+                     :issue-instant (when issue-instant-str
+                                      (time:parse-saml-time issue-instant-str))
+                     :version (or version-val "2.0")
+                     :destination destination-val
+                     :in-response-to in-response-to-val
+                     :issuer (when issuer-elem
+                               (issuer:parse-issuer-xml issuer-elem))
+                     :status (when status-elem
+                               (saml-status:parse-status-xml status-elem))))))
 
 ;;; ──────────────────────────────────────────────
 ;;; Serialization
@@ -174,16 +174,15 @@ Returns: logout-response instance"
          (slo-url (idp-config:slo-url idp-config))
          (response-id (identifiers:generate-saml-id))
          (issue-instant-val (time:current-time))
-         (status-val (or status (saml-status:make-status-success)))
-         (logout-resp (make-logout-response
-                       :id response-id
-                       :issue-instant issue-instant-val
-                       :version "2.0"
-                       :destination slo-url
-                       :in-response-to in-response-to
-                       :issuer (issuer:make-issuer entity-id)
-                       :status status-val)))
-    logout-resp))
+         (status-val (or status (saml-status:make-status-success))))
+    (make-instance 'logout-response
+                   :id response-id
+                   :issue-instant issue-instant-val
+                   :version "2.0"
+                   :destination slo-url
+                   :in-response-to in-response-to
+                   :issuer (issuer:make-issuer entity-id)
+                   :status status-val)))
 
 (defun generate-logout-response-xml (idp-config &key in-response-to status)
   "Generate a LogoutResponse XML string from an IdP configuration.

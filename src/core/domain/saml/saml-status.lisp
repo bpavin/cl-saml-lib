@@ -9,7 +9,11 @@
    #:saml-status-code
    #:saml-status-message
    #:parse-status-xml
-   #:build-status-xml))
+   #:build-status-xml
+   #:make-status-success
+   #:make-status-requester
+   #:make-status-responder
+   #:make-status-version-mismatch))
 
 (in-package :cl-saml-lib/src/core/domain/saml/saml-status)
 

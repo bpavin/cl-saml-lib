@@ -41,10 +41,10 @@
 
 (defclass-std:defclass/std logout-request ()
   ((id :type string)
-   (issue-instant :type time:saml-timestamp)
+   (issue-instant :type local-time:timestamp)
    (version :type string)
    (destination :type (or null string))
-   (not-on-or-after :type (or null time:saml-timestamp))
+   (not-on-or-after :type (or null local-time:timestamp))
    (consent :type (or null string))
    (issuer :type (or null issuer:issuer))
    (name-id :type (or null name-id:name-id))
@@ -128,21 +128,21 @@ Returns: logout-request"
                                 (format nil "~A:SessionIndex"
                                         namespaces:+saml-protocol-namespace+)
                                 namespaces:+saml-namespace-declaration+)))
-      (make-logout-request
-       :id id-val
-       :issue-instant (when issue-instant-str
-                        (time:parse-saml-time issue-instant-str))
-       :version (or version-val "2.0")
-       :destination destination-val
-       :not-on-or-after (when not-on-or-after-str
-                          (time:parse-saml-time not-on-or-after-str))
-       :consent consent-val
-       :issuer (when issuer-elem
-                 (issuer:parse-issuer-xml issuer-elem))
-       :name-id (when name-id-elem
-                  (name-id:parse-nameid-xml name-id-elem))
-       :session-index (when session-index-elem
-                        (xml:xml-element-text-content session-index-elem))))))
+      (make-instance 'logout-request
+                     :id id-val
+                     :issue-instant (when issue-instant-str
+                                      (time:parse-saml-time issue-instant-str))
+                     :version (or version-val "2.0")
+                     :destination destination-val
+                     :not-on-or-after (when not-on-or-after-str
+                                        (time:parse-saml-time not-on-or-after-str))
+                     :consent consent-val
+                     :issuer (when issuer-elem
+                               (issuer:parse-issuer-xml issuer-elem))
+                     :name-id (when name-id-elem
+                                (name-id:parse-nameid-xml name-id-elem))
+                     :session-index (when session-index-elem
+                                      (xml:xml-element-text-content session-index-elem))))))
 
 ;;; ──────────────────────────────────────────────
 ;;; Serialization
@@ -192,16 +192,15 @@ Returns: logout-request instance"
   (let* ((entity-id (idp-config:entity-id idp-config))
          (slo-url (idp-config:slo-url idp-config))
          (request-id (identifiers:generate-saml-id))
-         (issue-instant-val (time:current-time))
-         (logout-req (make-logout-request
-                      :id request-id
-                      :issue-instant issue-instant-val
-                      :version "2.0"
-                      :destination slo-url
-                      :issuer (issuer:make-issuer entity-id)
-                      :name-id name-id
-                      :session-index session-index)))
-    logout-req))
+         (issue-instant-val (time:current-time)))
+    (make-instance 'logout-request
+                   :id request-id
+                   :issue-instant issue-instant-val
+                   :version "2.0"
+                   :destination slo-url
+                   :issuer (issuer:make-issuer entity-id)
+                   :name-id name-id
+                   :session-index session-index)))
 
 (defun generate-logout-request-xml (idp-config &key name-id session-index)
   "Generate a LogoutRequest XML string from an IdP configuration.
