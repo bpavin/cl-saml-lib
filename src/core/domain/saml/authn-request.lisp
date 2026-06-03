@@ -292,7 +292,9 @@ Returns: (values valid-p error-message)")
 (defmethod build-authn-request-xml ((this authn-request))
   "Build AuthnRequest XML element."
   (let ((attrs (append
-                `(("ID" ,(id this))
+                `(("xmlns:samlp" #.namespaces:+saml-protocol-uri+)
+                  ("xmlns:saml" #.namespaces:+saml-uri+)
+                  ("ID" ,(id this))
                   ("Version" ,(version this))
                   ("IssueInstant" ,(time:format-saml-time (issue-instant this))))
                 (when (destination this)
