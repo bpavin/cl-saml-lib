@@ -15,6 +15,9 @@
   (:import-from :cl-saml-lib/src/core/actions/generate-sp-metadata)
   (:import-from :cl-saml-lib/src/core/actions/generate-idp-metadata)
   (:import-from :cl-saml-lib/src/core/actions/generate-authn-request)
+  (:import-from :cl-saml-lib/src/core/actions/generate-logout-request)
+  (:import-from :cl-saml-lib/src/core/actions/generate-logout-response)
+  (:import-from :cl-saml-lib/src/core/actions/decode-logout-request)
   (:export
    #:app-ctx
    #:idp-config
@@ -30,6 +33,9 @@
    #:generate-sp-metadata
    #:generate-idp-metadata
    #:generate-authn-request
+   #:generate-logout-request
+   #:generate-logout-response
+   #:decode-logout-request
    #:shutdown))
 
 (in-package :cl-saml-lib/src/core/app-ctx)
@@ -47,7 +53,10 @@
    (decode-idp-metadata :type decode-idp-metadata:decode-idp-metadata)
    (generate-sp-metadata :type generate-sp-metadata:generate-sp-metadata)
    (generate-idp-metadata :type generate-idp-metadata:generate-idp-metadata)
-   (generate-authn-request :type generate-authn-request:generate-authn-request)))
+   (generate-authn-request :type generate-authn-request:generate-authn-request)
+   (generate-logout-request :type generate-logout-request:generate-logout-request)
+   (generate-logout-response :type generate-logout-response:generate-logout-response)
+   (decode-logout-request :type decode-logout-request:decode-logout-request)))
 
 ;; https://sptest.iamshowcase.com/ixs?idp=69dc12aa2ca82c62e8c4016899d961e798eac60c
 (defmethod initialize-instance :after ((this app-ctx) &key)
@@ -88,7 +97,18 @@
                        :idp-config (idp-config this)
                        :crypto-provider (crypto-provider this)))
   (setf (generate-authn-request this)
-        (make-instance 'generate-authn-request:generate-authn-request)))
+        (make-instance 'generate-authn-request:generate-authn-request))
+  (setf (generate-logout-request this)
+        (make-instance 'generate-logout-request:generate-logout-request
+                       :idp-config (idp-config this)
+                       :crypto-provider (crypto-provider this)))
+  (setf (generate-logout-response this)
+        (make-instance 'generate-logout-response:generate-logout-response
+                       :idp-config (idp-config this)
+                       :crypto-provider (crypto-provider this)))
+  (setf (decode-logout-request this)
+        (make-instance 'decode-logout-request:decode-logout-request
+                       :xml-parser (xml-parser this))))
 
 (defun create-idp-config ()
   (let* ((project (asdf:system-source-directory :cl-saml-lib))
