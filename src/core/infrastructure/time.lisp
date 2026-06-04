@@ -43,7 +43,8 @@ Returns: universal time integer"
 Format: YYYY-MM-DDTHH:MM:SSZ (UTC)
 TIMESTAMP: universal time integer
 Returns: string"
-  (local-time:format-timestring nil timestamp :format +saml-time-format+))
+  (when timestamp
+   (local-time:format-timestring nil timestamp :format +saml-time-format+)))
 
 (defun parse-saml-time (time-string)
   "Parse SAML time string to timestamp.

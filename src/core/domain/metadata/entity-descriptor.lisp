@@ -158,7 +158,7 @@
                                          :protocol-support (list namespaces:+saml-protocol-uri+)
                                          :key-descriptors (list key-descriptor)
                                          :assertion-consumer-service (list acs-endpoint)
-                                         :want-assertions-signed t))
+                                         :want-assertions-signed (sp-config:want-assertions-signed config)))
            ;; Create entity descriptor
            (entity-desc (make-instance 'entity-descriptor
                                        :entity-id entity-id
