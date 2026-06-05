@@ -11,7 +11,9 @@
 (in-package :cl-saml-lib/src/core/infrastructure/saml-error)
 
 (define-condition saml-error (error)
-  ((text :initarg :text :accessor text)))
+  ((text :initarg :text :accessor text))
+  (:report (lambda (condition stream)
+             (format stream "~A" (text condition)))))
 
 (define-condition signing-error (saml-error)
   ((code :initarg :code :accessor code)))
