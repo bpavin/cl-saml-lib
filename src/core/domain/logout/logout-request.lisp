@@ -30,8 +30,8 @@
    ;; validation
    #:validate-logout-request
    ;; generation
-   #:generate-logout-request-xml
-   #:generate-logout-request-from-config))
+   #:generate-logout-request-xml-from-idp-config
+   #:generate-logout-request-xml-from-sp-config))
 
 (in-package :cl-saml-lib/src/core/domain/logout/logout-request)
 
@@ -139,23 +139,6 @@ Returns: logout-request"
                                       (xml:xml-element-text-content session-index-elem))))))
 
 ;;; ──────────────────────────────────────────────
-;;; Serialization
-;;; ──────────────────────────────────────────────
-
-(defun logout-request-to-string (logout-req)
-  "Serialize a logout-request to an XML string."
-  (let* ((element (build-logout-request-xml logout-req))
-         (doc (xml:make-xml-element (xml:xml-element-tag element)
-                                    :attributes (xml:xml-element-attributes element)
-                                    :children (xml:xml-element-children element)
-                                    :namespace namespaces:+saml-protocol-uri+)))
-    ;; Add namespace declarations
-    (dolist (ns namespaces:+saml-namespace-declaration+)
-      (destructuring-bind (prefix . uri) ns
-        (setf (xml:xml-get-attribute doc (format nil "xmlns:~A" prefix)) uri)))
-    (xml:serialize-xml doc :pretty t)))
-
-;;; ──────────────────────────────────────────────
 ;;; Validation
 ;;; ──────────────────────────────────────────────
 
@@ -177,7 +160,7 @@ Returns: (values valid-p error-message)"
 ;;; Generation Pipeline
 ;;; ──────────────────────────────────────────────
 
-(defun generate-logout-request-from-config (idp-config &key name-id session-index)
+(defun generate-logout-request-from-idp-config (idp-config &key name-id session-index)
   "Generate a LogoutRequest domain object from an IdP configuration.
 IDP-CONFIG: idp-config instance providing entity-id and SLO URL.
 NAME-ID: optional name-id for the user session to terminate.
@@ -196,13 +179,43 @@ Returns: logout-request instance"
                    :name-id name-id
                    :session-index session-index)))
 
-(defun generate-logout-request-xml (idp-config &key name-id session-index)
+(defun generate-logout-request-from-sp-config (sp-config &key name-id session-index)
+  "Generate a LogoutRequest domain object from an SP configuration.
+IDP-CONFIG: idp-config instance providing entity-id and SLO URL.
+NAME-ID: optional name-id for the user session to terminate.
+SESSION-INDEX: optional session index string.
+Returns: logout-request instance"
+  (let* ((entity-id (sp-config:entity-id sp-config))
+         (slo-url (sp-config:slo-url sp-config))
+         (request-id (identifiers:generate-saml-id))
+         (issue-instant-val (time:current-time)))
+    (make-instance 'logout-request
+                   :id request-id
+                   :issue-instant issue-instant-val
+                   :version "2.0"
+                   :destination slo-url
+                   :issuer (issuer:make-issuer entity-id)
+                   :name-id name-id
+                   :session-index session-index)))
+
+(defun generate-logout-request-xml-from-idp-config (idp-config &key name-id session-index)
   "Generate a LogoutRequest XML string from an IdP configuration.
 IDP-CONFIG: idp-config instance.
 NAME-ID: optional name-id for the user session to terminate.
 SESSION-INDEX: optional session index string.
 Returns: XML string"
-  (let ((logout-req (generate-logout-request-from-config
+  (let ((logout-req (generate-logout-request-from-idp-config
                      idp-config :name-id name-id
                                 :session-index session-index)))
-    (logout-request-to-string logout-req)))
+    (build-logout-request-xml logout-req)))
+
+(defun generate-logout-request-xml-from-sp-config (sp-config &key name-id session-index)
+  "Generate a LogoutRequest XML string from an IdP configuration.
+IDP-CONFIG: idp-config instance.
+NAME-ID: optional name-id for the user session to terminate.
+SESSION-INDEX: optional session index string.
+Returns: XML string"
+  (let ((logout-req (generate-logout-request-from-sp-config
+                     sp-config :name-id name-id
+                                :session-index session-index)))
+    (build-logout-request-xml logout-req)))
