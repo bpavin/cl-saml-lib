@@ -76,7 +76,8 @@
                        :binding binding
                        :location location
                        :response-location response-location
-                       :index (parse-integer index-str)
+                       :index (if (and index-str (not (string-equal "" index-str)))
+                                  (parse-integer index-str))
                        :is-default (when is-default t))
         (make-instance 'endpoint
                        :binding binding
