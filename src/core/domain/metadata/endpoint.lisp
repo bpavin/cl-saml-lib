@@ -71,13 +71,12 @@
          (response-location (xml:xml-get-attribute this "ResponseLocation"))
          (index-str (xml:xml-get-attribute this "index"))
          (is-default (string= (xml:xml-get-attribute this "isDefault") "true")))
-    (if (and index-str (eq class 'indexed-endpoint))
+    (if (and index-str (not (string-equal "" index-str)) (eq class 'indexed-endpoint))
         (make-instance 'indexed-endpoint
                        :binding binding
                        :location location
                        :response-location response-location
-                       :index (if (and index-str (not (string-equal "" index-str)))
-                                  (parse-integer index-str))
+                       :index (parse-integer index-str)
                        :is-default (when is-default t))
         (make-instance 'endpoint
                        :binding binding
