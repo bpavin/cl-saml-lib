@@ -118,23 +118,6 @@ Returns: logout-response"
                                (saml-status:parse-status-xml status-elem))))))
 
 ;;; ──────────────────────────────────────────────
-;;; Serialization
-;;; ──────────────────────────────────────────────
-
-(defun logout-response-to-string (logout-resp)
-  "Serialize a logout-response to an XML string."
-  (let* ((element (build-logout-response-xml logout-resp))
-         (doc (xml:make-xml-element (xml:xml-element-tag element)
-                                    :attributes (xml:xml-element-attributes element)
-                                    :children (xml:xml-element-children element)
-                                    :namespace namespaces:+saml-protocol-uri+)))
-    ;; Add namespace declarations
-    (dolist (ns namespaces:+saml-namespace-declaration+)
-      (destructuring-bind (prefix . uri) ns
-        (setf (xml:xml-get-attribute doc (format nil "xmlns:~A" prefix)) uri)))
-    (xml:serialize-xml doc :pretty t)))
-
-;;; ──────────────────────────────────────────────
 ;;; Validation
 ;;; ──────────────────────────────────────────────
 
@@ -187,4 +170,4 @@ Returns: XML string"
   (let ((logout-resp (generate-logout-response-from-config idp-config
                                                            :in-response-to in-response-to
                                                            :status status)))
-    (logout-response-to-string logout-resp)))
+    (build-logout-response-xml logout-resp)))
